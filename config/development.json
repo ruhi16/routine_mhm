@@ -1,0 +1,6 @@
+{
+    "name": "Development - Manikchak Class Routine 2022 Service...",
+    "dbconn": {
+        "mongodbURI" : "mongodb://localhost:27017/routine_mhm"
+    }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+
+    <% ClsSecns.forEach( (cls_section) =>{%>
+      
+      
+      <table class="table table-bordered">
+        <tr>
+          <th class="text-center">
+            <%= cls_section.classId.name%>-<%= cls_section.sectionId.name %>
+          </th>
+          <% for(var i=0; i< 8; i++){ %>
+            <th class="text-center"><%= i+1 %></th>
+          <% } %>          
+        </tr>
+        <% Weekdays.forEach( weekday => { %>
+          <tr>
+            <td><%= weekday.name %></td>
+            <% for(var i=0; i< weekday.periods; i++){ %>
+              <td>
+                <% data = Schedules.filter(function(schedule){ 
+                  return  schedule.weekday._id.equals(weekday._id ) &&   
+                          schedule.class._id.equals(cls_section.classId._id) &&   
+                          schedule.section._id.equals(cls_section.sectionId._id) &&   
+                          
+                          schedule.period_no == (i+1) ;
+                }) %>
+                <% data.map(function(d){%>
+                  <%  id = d._id %>
+                  <%= d.subject.name %><br>
+                  <%= d.teacher.shortName %>
+                  
+                <%}) %>
+              </td>
+            <% } %>
+          </tr>
+        <% }); %>
+
+      </table>
+    <% }); %>
+
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+
+  </body>
+</html>

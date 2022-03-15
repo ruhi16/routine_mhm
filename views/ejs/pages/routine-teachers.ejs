@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <%- include('../partials/head'); %> -->
+    <style>
+      table{
+        table-layout: fixed;        
+        width: 100px;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);        
+      }
+      th {
+          width: 50px;
+        }
+      
+    </style>
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <!-- <%- include('../partials/header'); %> -->
+    </header>
+
+<% var wkday = 1; %>
+
+<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <% Weekdays.forEach( weekday => { %>
+
+    <li class="nav-item" role="presentation">
+      <a class="nav-link <%= weekday.day_id === wkday ? 'active' : '' %>" " 
+          id="<%= weekday.name %>-tab" data-toggle="tab" href="#<%= weekday.name %>" role="tab" aria-controls="home" aria-selected="false"><%= weekday.name %></a>
+    </li>
+
+  <% }); %>
+</ul> -->
+
+<div class="tab-content" id="myTabContent">
+
+  <% Weekdays.forEach( weekday => { %>
+    <div class="tab-pane fade <%= weekday.day_id === wkday ? 'show active' : '' %>" 
+            id="<%= weekday.name %>" role="tabpanel" aria-labelledby="<%= weekday.name %>-tab">
+      <h1 class="text-center"><%= weekday.name %></h1>
+      <!-- <%= new Date().getDay();%> -->
+
+        
+
+        <div class = "row">
+          <div class = "col-sm-12">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <% for(var i=0; i< weekday.periods; i++){ %>
+                  <th><%= i+1 %></th>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody>
+
+              <% Teachers.forEach((teacher)=>{ %>
+                <tr>
+                  <td><%= teacher.name %></td>
+                  <% for(var i=0; i< weekday.periods; i++){ %>
+                    <td>
+                      <% data = Schedules.filter(function(schedule){ 
+                        return  schedule.weekday._id.equals(weekday._id ) && 
+                                schedule.teacher._id.equals(teacher._id ) &&
+                                schedule.period_no == (i+1) ;
+                      }) %>
+                      <% data.map(function(d){%>
+                        <%  id = d._id %>
+                        <%= d.subject.name %><br>
+                        <%= d.class.name %>
+                        <%= d.section.name %>
+                      <%}) %>
+                    </td>
+                  <% } %>
+                </tr>
+              <% });%>
+            </tbody>
+          </table>
+          </div>  
+          
+        </div>
+
+      <BR><BR>
+    </div>  
+  <% }); %>
+  
+</div>
+
+
+
+
+
+
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+
+  </body>
+</html>

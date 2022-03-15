@@ -1,0 +1,7 @@
+{
+    "name": "Development - Manikchak Class Routine 2022 Service...",
+    "dbconn": {        
+        "mongodbURI" : "mongodb+srv://ruhi16:asdf1234@cluster0.g0otn.mongodb.net/routine_mhm?retryWrites=true&w=majority"
+    }
+}
+

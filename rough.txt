@@ -1,0 +1,150 @@
+  // res.send("<h1>Welcome Guyes....</h1>");
+    // const sch = new School({
+    //     name: 'Manikchak High Madrasah(H.S.)'
+    // });
+    // const sch_res = await sch.save();
+    // console.log("School: " + sch_res);
+    // const clses = await Class.find({"name":"XII"});
+    // console.log("Class: " + clses[0]._id);
+
+    // const sections = await Section.find({"name": {$in: ['A']}});
+    // console.log("Sections:"+sections);
+
+    // sections.forEach(async (section) => {
+    //     console.log("Section:"+section.name);
+    //     const cls_sec = new Class_Section({
+    //         "classId": clses[0]._id,
+    //         "sectionId": section._id
+    //     });
+    //     // await cls_sec.save();
+    // });
+
+    // const weekday1 = new Weekday({
+    //     "name": "Monday",
+    //     "shortName": "MON",
+    //     "day_id": 1,
+    //     "periods": 8,
+    //     "tiffin": 4
+    // });
+    // weekday1.save();
+
+    // const weekday2 = new Weekday({
+    //     "name": "Tuesday",
+    //     "shortName": "TUE",
+    //     "day_id": 2,
+    //     "periods": 8,
+    //     "tiffin": 4
+    // });
+    // weekday2.save();
+
+    // const weekday3 = new Weekday({
+    //     "name": "Wednes",
+    //     "shortName": "WED",
+    //     "day_id": 3,
+    //     "periods": 8,
+    //     "tiffin": 4
+    // });
+    // weekday3.save();
+
+    // const weekday4 = new Weekday({
+    //     "name": "Thursday",
+    //     "shortName": "THU",
+    //     "day_id": 4,
+    //     "periods": 8,
+    //     "tiffin": 4
+    // });
+    // weekday4.save();
+
+    // const weekday5 = new Weekday({
+    //     "name": "Friday",
+    //     "shortName": "FRY",
+    //     "day_id": 5,
+    //     "periods": 7,
+    //     "tiffin": 2
+    // });
+    // weekday5.save();
+
+    // const weekday6 = new Weekday({
+    //     "name": "Saturday",
+    //     "shortName": "SAT",
+    //     "day_id": 6,
+    //     "periods": 5,
+    //     "tiffin": 0
+    // });
+    // weekday6.save();
+
+
+
+
+
+<!-- <main>
+  <div class="jumbotron">
+    <h1>This is great</h1>
+    <p>Welcome to templating using EJS</p>
+    <button class="btn btn-info">Click Me</button>
+  </div>
+</main> -->
+<!-- <% let year = (new Date()).getFullYear() %>
+<p style="float:right;">&copy;<%= year %> rawsolutions.com</p> -->
+
+
+<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Home</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+  </li>
+</ul> -->
+<!-- 
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade "             id="home" role="tabpanel" aria-labelledby="home-tab">Hari<BR><BR></div>
+  <div class="tab-pane fade"              id="profile" role="tabpanel" aria-labelledby="profile-tab">Rams<BR><BR></div>
+  <div class="tab-pane fade show active"  id="contact" role="tabpanel" aria-labelledby="contact-tab">Narayan<BR><BR></div>
+</div> -->
+<!-- <% var wkday = new Date().getDay(); %> -->
+
+// const subject2 = await Subject.find({"name": "English"});
+        // const subject3 = await Subject.find({"name": "Arabic"});
+        // const subject4 = await Subject.find({"name": "Mathematics"});
+        // cls_sub.subjects.push(subject2[0]._id);
+        // cls_sub.subjects.push(subject3[0]._id);
+        // cls_sub.subjects.push(subject4[0]._id);
+        // await cls_sub.update({$push: {subjects: subject}});
+        // await cls_sub.save();
+
+
+        // console.log("Subject:" + subject[0]._id);
+        // console.log("Subject Name:" + subject[0].name);
+        
+        // const cls_sub = new Class_Subject({
+        //     "class": cls._id,
+        //     "subjects": [subject[0]._id]
+        // });
+
+
+
+            // console.log(allotedTeachersArr);
+
+
+      // for(schedule of schedulesObj){
+      //   console.log(schedule.class);
+      // }
+
+      // for(const cls_sub of cls_subjsObj){
+      //   // console.log(cls_sub);
+      //   console.log(cls_sub.class.name);
+      //   // console.log(cls_sub.class);
+      //   // console.log(cls_sub.subjects[0].name);
+      //   cls_sub.subjects.map((sub)=>{
+      //     // console.log(sub.name);
+      //   });
+      // }
+
+      // for (const subject of subjectsObj) {
+      //   // console.log(subject.name);
+      //   $('#subject').append('<option value = "'+ subject._id +'">'+ subject.name +'</option>');        
+      // }
