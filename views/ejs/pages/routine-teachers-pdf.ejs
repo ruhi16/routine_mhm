@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head'); %>    
+    <style>
+      table{
+        table-layout: fixed;        
+        width: 90%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.7em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);        
+      }
+        
+        td {
+        /* padding: 10px; */
+        border: solid 1px;
+        text-align: center;
+        }
+        td.teacher-name{
+            text-align: left;
+        }
+     
+      
+    </style>
   </head>
   
   <body class="container">
 
     <header>
-      <%- include('../partials/header'); %>
+      
     </header>
 
 <% var wkday = 1; %>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <% Weekdays.forEach( weekday => { %>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link <%= weekday.day_id === wkday ? 'active' : '' %>" " 
-          id="<%= weekday.name %>-tab" data-toggle="tab" href="#<%= weekday.name %>" role="tab" aria-controls="home" aria-selected="false"><%= weekday.name %></a>
-    </li>
-
-  <% }); %>
-</ul>
 
 <div class="tab-content" id="myTabContent">
 
@@ -29,15 +41,16 @@
     <div class="tab-pane fade <%= weekday.day_id === wkday ? 'show active' : '' %>" 
             id="<%= weekday.name %>" role="tabpanel" aria-labelledby="<%= weekday.name %>-tab">
       <h1 class="text-center"><%= weekday.name %></h1>
-      <!-- <%= new Date().getDay();%> -->
+      
 
         
 
         <div class = "row">
           <div class = "col-sm-12">
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered table-sm" border="1">
               <thead>
               <tr>
+                <th>#</th>
                 <th>Name</th>
                 <% for(var i=0; i< weekday.periods; i++){ %>
                   <th><%= i+1 %></th>
@@ -45,10 +58,11 @@
               </tr>
             </thead>
             <tbody>
-
+              <% var teacherSl = 0 %>
               <% Teachers.forEach((teacher)=>{ %>
                 <tr>
-                  <td><%= teacher.name %></td>
+                    <td><%= ++teacherSl %></td>
+                  <td class="teacher-name"><%= teacher.name %></td>
                   <% for(var i=0; i< weekday.periods; i++){ %>
                     <td>
                       <% data = Schedules.filter(function(schedule){ 
@@ -70,10 +84,9 @@
           </table>
           </div>  
           
-        </div>
-
-      <BR><BR>
+        </div>        
     </div>  
+    <br><div style="page-break-after:always;"></div>
   <% }); %>
   
 </div>

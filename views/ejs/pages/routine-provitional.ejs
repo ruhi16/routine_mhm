@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+    Provitional Routine
+    <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Reason </th>
+            <th scope="col">Off Periods</th>
+            <th scope="col" class="text-center">Actions
+                <button type="button" class="btn btn-primary ml-5"  data-toggle="modal" data-target=".bd-example-modal-lg">Add</button>
+                
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Hari Narayan Das</td>
+            <td>Absent</td>
+            <td>All</td>
+            <td class="text-right"><button class="btn btn-warning">Present</button></td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Abdul Momen</td>
+            <td>Onduty</td>
+            <td>1,2,3,4,</td>
+            <td class="text-right"><button class="btn btn-warning">Present</button></td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>All</td>
+            <td>1,2,3,4</td>
+            <td>@twitter</td>
+            <td class="text-right"><button class="btn btn-warning">Present</button></td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>All</td>
+            <td>1,2,3,4</td>
+            <td>@twitter</td>
+            <td class="text-right"><button class="btn btn-warning">Present</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-success">Cancel</button>
+            <button type="button" class="btn btn-primary">Submit</button>            
+        </div>
+      </div>
+
+
+      <!-- modal -->
+      <div class="modal fade bd-example-modal-lg" id="subjtechmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <form action="/user" method="post">
+              <div class="modal-header">Title</div>
+              <div class="modal-body">
+      
+              
+      
+                <div class="form-group row">
+                  <label for="subject" class="col-sm-2 col-form-label">Subject</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="subject" name="subject">
+                      <!-- <option name="" value="">Select</option> -->
+                      <!-- <option name="bengali">Bengali</option>
+                      <option name="english">English</option>
+                      <option name="arabic">Arabic</option>
+                      <option name="math">Mathematics</option> -->
+                    </select>
+                  </div>
+                </div>
+      
+                
+                <div class="form-group row">
+                  <label for="teacher" class="col-sm-2 col-form-label">Teacher</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="teacher" name="teacher">
+                      <option name="" value="">Select</option>
+      
+                    </select>
+                  </div>
+                </div>
+      
+                <!-- <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" name="checked" id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div> -->
+                
+                
+            </div>
+            <div class="modal-footer">        
+              <button class="btn btn-info float-right mr-2" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-warning float-right">Submit</button>
+                
+              
+              <!-- <a class="btn btn-danger" data-dismiss="modal" value="Close" >Close</a> -->
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+
+  </body>
+</html>

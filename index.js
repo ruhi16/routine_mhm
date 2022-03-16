@@ -2,7 +2,11 @@ const express = require('express');
 const createError = require('http-errors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+
 const path = require('path');
+const fs = require('fs');
+
+
 
 const ejs = require("ejs");
 const pdf = require("html-pdf");
@@ -88,6 +92,15 @@ app.set("view engine", "ejs");
 app.use('/css', express.static(path.resolve(__dirname, "assets/css")));
 app.use('/img', express.static(path.resolve(__dirname, "assets/img")));
 app.use('/js' , express.static(path.resolve(__dirname, "assets/js")));
+app.use('/pdf' , express.static(path.resolve(__dirname, "assets/pdf")));
+
+
+app.get('/routine-provitional', async (req,res)=>{
+
+    
+    res.render('ejs/pages/routine-provitional');
+});
+
 
 app.get('/routine-teachers', async (req,res) => {
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
@@ -102,7 +115,7 @@ app.get('/routine-teachers', async (req,res) => {
     .populate('teacher')
     ;;
 
-    res.render('ejs/pages/routine-teachers',{
+    res.render('ejs/pages/routine-teachers-pdf',{
         Weekdays,
         Teachers,
         Schedules        
@@ -122,7 +135,7 @@ app.get('/routine-teachers-pdf', async (req,res) => {
     .populate('teacher')
     ;;
 
-    ejs.renderFile(path.join(__dirname, './views/ejs/pages/', "routine-teachers.ejs"), 
+    ejs.renderFile(path.join(__dirname, './views/ejs/pages/', "routine-teachers-pdf.ejs"), 
         { Weekdays, Teachers, Schedules }, 
         (err, data) => {
         if (err) {
@@ -131,18 +144,23 @@ app.get('/routine-teachers-pdf', async (req,res) => {
             let options = {
                 "height": "11.25in",
                 "width": "8.5in",
+                "zoomFactor": ".75",
                 "header": {
-                    "height": "20mm"
+                    "height": "2mm"
                 },
                 "footer": {
-                    "height": "20mm",
+                    "height": "2mm",
                 },
             };
-            pdf.create(data, options).toFile("report.pdf", function (err, data) {
+            pdf.create(data, options).toFile("assets/pdf/TeachersRoutine.pdf", function (err, data) {
                 if (err) {
                     res.send(err);
                 } else {
-                    res.send("File created successfully");
+                    const file = fs.createWriteStream("assets/pdf/TeachersRoutine.pdf");
+                    // res.pipe(file);
+                    // res.render('assets/pdf/TeachersRoutine.pdf');
+                    res.download("assets/pdf/TeachersRoutine.pdf");
+                    // res.send('<a href="assets/pdf/TeachersRoutine.pdf" download>Download</a>');
                 }
             });
         }
