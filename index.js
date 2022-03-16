@@ -48,7 +48,8 @@ const {
     Class_Subject,
     Teacher_Subject,    
     Schedule,
-    Provisional
+    Provisional,
+    User
 } = require('./models/all.model');
 const app = express();
 
@@ -69,9 +70,10 @@ app.use(bodyParser.json());
 app.use(morgan('tiny'));    //tiny, combined, dev
 
 // Root of the Page of Web Site
-app.get('/', (req, res)=>{
+app.get('/', async(req, res)=>{
     //console.log(req.body);
-    res.send({status: 200, message: "This is Root Page."});
+    const user = await User.findOne({});
+    res.send({status: 200, message: "This is Root Page."+user});
 });
 
 app.post('/user', (req,res)=>{
