@@ -7,16 +7,18 @@ const router = express.Router();
 
 router.get('/in-class-subjects', async(req, res)=>{
     const clses = await Class.find({});
-    const subjects = await Subject.find({});
+    const subjects = await Subject.find({
+        grade: "secondary"
+    });
 
     const cls_sub = await Class_Subject.find({})
         .populate('class').populate('subjects');
         
     const Weekdays = await Weekday.find({});
 
-    // (await classes).forEach(cls =>{
-    //     console.log(cls.name)
-    // });
+    subjects.forEach(async (subj) =>{
+        console.log(subj.name);
+    })
     
     
     
