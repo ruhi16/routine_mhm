@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/in-class-subjects', async(req, res)=>{
     const clses = await Class.find({});
     const subjects = await Subject.find({
-        grade: "secondary"
+       "grade": "Seconday"
     });
 
     const cls_sub = await Class_Subject.find({})
