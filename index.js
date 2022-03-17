@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 
-
+const inputRoute = require('./routes/inputRoutes');
 
 const ejs = require("ejs");
 const pdf = require("html-pdf");
@@ -52,6 +52,9 @@ const {
     User
 } = require('./models/all.model');
 const app = express();
+
+
+app.use('/input/', inputRoute.router);
 
 const dotenv = require('dotenv');
 dotenv.config();

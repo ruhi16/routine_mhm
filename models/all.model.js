@@ -86,7 +86,7 @@ const Room = mongoose.model('Room', roomSchema);
 const subjectSchema = new mongoose.Schema({
     name: {type:String, required: true},     
     shortName: {type:String, required: true}, 
-    status: {type:String},    
+    grade: {type:String},    
     desc: {type:String},
 
     status: {type:String},

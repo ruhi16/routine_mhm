@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>    
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+
+    <h1>Input Class Subjects</h1>
+    <% clses.forEach( cls => { %>
+        <%= cls.name %>
+    <% }) %>
+
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+
+  </body>
+</html>
