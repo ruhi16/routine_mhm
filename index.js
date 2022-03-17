@@ -6,55 +6,17 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 
-const inputRoute = require('./routes/inputRoutes');
+
 
 const ejs = require("ejs");
 const pdf = require("html-pdf");
-let students = [
-    {name: "Joy",
-     email: "joy@example.com",
-     city: "New York",
-     country: "USA"},
-    {name: "John",
-     email: "John@example.com",
-     city: "San Francisco",
-     country: "USA"},
-    {name: "Clark",
-     email: "Clark@example.com",
-     city: "Seattle",
-     country: "USA"},
-    {name: "Watson",
-     email: "Watson@example.com",
-     city: "Boston",
-     country: "USA"},
-    {name: "Tony",
-     email: "Tony@example.com",
-     city: "Los Angels",
-     country: "USA"
- }];
-
 
 
 const {
-    School,
-    Session,
-    Class, 
-    Section, 
-    Room,
-    Subject,
-    Weekday,
-    Teacher,
-    Class_Section,
-    Class_Subject,
-    Teacher_Subject,    
-    Schedule,
-    Provisional,
-    User
-} = require('./models/all.model');
+    School,Session,Class, Section, Room,Subject, Weekday, Teacher, Class_Section, Class_Subject,Teacher_Subject,    
+    Schedule, Provisional, User } = require('./models/all.model');
+
 const app = express();
-
-
-app.use('/input/', inputRoute.router);
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -71,6 +33,13 @@ app.use(bodyParser.json());
 
 //Log message at console
 app.use(morgan('tiny'));    //tiny, combined, dev
+
+// Routes
+const inputRoute = require('./routes/inputRoutes');
+app.use('/input/', inputRoute.router);
+
+
+
 
 // Root of the Page of Web Site
 app.get('/', async(req, res)=>{

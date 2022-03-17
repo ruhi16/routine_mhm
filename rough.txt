@@ -74,7 +74,17 @@
     // weekday6.save();
 
 
+ <!-- <% if(typeof data == 'object' && data.length > 0){ %>
+                        true
+                      <% }else{ %>
+                        false
+                      <% } %> -->
 
+
+                      <!-- wkday:<%= weekday._id %>
+                      cls:<%= cls_section.classId.name %>
+                      sec:<%= cls_section.sectionId.name %>
+                      period:<%= i+1 %> -->
 
 
 <!-- <main>
