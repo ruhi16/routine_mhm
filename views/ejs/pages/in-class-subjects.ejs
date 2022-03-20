@@ -14,22 +14,54 @@
     <table class="table table-bordered">
       <% clses.forEach( cls => { %>
         <tr>
-          <td><%= cls.name %></td>
+          <td><%= cls.name %><br><%= cls._id %></td>
           <td>
             
-            <% subjects.map(function(subject){ %>              
+            <% subjects.map(function(subject){ %>
+              <% cls_subjects = class_subjects.filter(cls_sub => { 
+                return cls_sub.class._id.equals(cls._id);
+              }); %>           
+  
+              <% subjs = cls_subjects.map(cls_subjs => { 
+                  return cls_subjs.subjects 
+                }); %>
+
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <input class="form-check-input" type="checkbox" name="<%= cls.name%>[]" value="<%= subject._id%>" id="flexCheckDefault"
+                <% subjs.map( sub => { %>
+                  <% sub.map(s => { %>                    
+                    <%=  subject._id.equals(s._id)? 'Checked':'' %>
+                  <% }) %>             
+                <% }) %>
+                >
                 <label class="form-check-label" for="flexCheckDefault">
-                  <%= subject.name %>
+                  <%= subject.name %>                  
+                  <!-- <%= subject._id %>  -->
                 </label>
-                </div>                
+              </div>
             <%}) %>
-              
-            
           </td>
           <td>
-            <button class="btn btn-primary">Save</button>
+            <% cls_subjects = class_subjects.filter(cls_sub => { 
+              return cls_sub.class._id.equals(cls._id);
+            }); %>           
+
+            <% subjs = cls_subjects.map(cls_subjs => { %>
+              <%return cls_subjs.subjects %>
+            <% }) %>                
+
+            <% subjs.map( sub => { %>
+              <% sub.map(s => { %>
+                <%= s.name %>-<%= s._id %>xx<br>  
+              <% }) %>             
+            <% }) %>
+
+             
+          </td>
+          <td>
+            <button class="btn btn-primary btnSave" id="<%= cls.name%>"
+              data-cls_id = <%= cls._id  %>
+              data-cls_nm = <%= cls.name %>   >Save</button>
           </td>
         </tr>
         
@@ -48,8 +80,53 @@
 
 
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript">    
+    $(document).ready(function(e){
+      var cls_id = '';
+      var cls_nm = '';
 
+
+      $('.btnSave').click(function(){
+        cls_id = $(this).data('cls_id');
+        cls_nm = $(this).data('cls_nm');
+        // var sub_all = $('input[name="V[]"]:checked').serialize();        
+        // console.log(sub_all);
+
+        // JSON.parse(sub_all).forEach(sub=>{
+        //   console.log('xx'+sub)
+        // });
+        var subjects = [];
+        
+        $('input[name="'+cls_nm+'[]"]:checked').each(function() {
+          // console.log(this.value);
+          subjects.push(this.value);
+        });
+
+        console.log(subjects);
+        // alert(cls_id+' <=> '+cls_nm+' <=> '+sub_all);
+
+
+        $.ajax({
+          url: "/input/ajax-class-subjects-submit",
+          method: "post",          
+          contentType: "application/json",
+          data: JSON.stringify({
+              cls_id: cls_id, cls_subjs: subjects
+          }),
+
+          success: function(msg){
+            console.log("success ajax:" + msg.response );
+            // console.log("success ajax:" + JSON.stringify(msg) );
+          },
+          error: function(err){
+            console.log("ajax error:" + err);
+          }
+      });
+
+      
+      });//btnSave
+    
+    });
   </script>
 
   </body>

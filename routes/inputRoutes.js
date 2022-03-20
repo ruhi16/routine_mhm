@@ -11,19 +11,83 @@ router.get('/in-class-subjects', async(req, res)=>{
        "grade": "Secondary"
     });
 
-    const cls_sub = await Class_Subject.find({})
+    const class_subjects = await Class_Subject.find({})
         .populate('class').populate('subjects');
         
     const Weekdays = await Weekday.find({});
 
-    subjects.forEach(async (subj) =>{
-        console.log(subj.name);
-    })
+    // subjects.forEach(async (subj) =>{
+    //     console.log(subj.name);
+    // });
     
     
     
     res.render('ejs/pages/in-class-subjects',{
-        clses, subjects, Weekdays
+        clses, subjects, class_subjects, Weekdays
+    });
+});
+
+
+
+router.post('/ajax-class-subjects-submit', async(req, res) => {       
+    console.log('ajax:'+ JSON.stringify(req.body) );
+    // console.log('req.class.id:' + req.body.cls_id );
+    // const filter = { _id: req.body.cls_id };
+    // const cls_subjects = await Class_Subject.findOne(filter);
+
+    const cls_subjects = await Class_Subject.findOne({
+        "class": req.body.cls_id
+    });
+
+    // console.log('cls_subjects:'+ cls_subjects );
+
+    if(cls_subjects){
+        console.log('cls_subj exists'); 
+
+        const data = cls_subjects.subjects;
+        // console.log('data:'+ data);
+
+        Class_Subject.updateOne(
+            { "class": req.body.cls_id },
+            { $pullAll: {subjects: data}}, 
+            function(err, data) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log('pop:' + JSON.stringify(data) );
+                }
+        });        
+
+        Class_Subject.updateOne(
+            {"class": req.body.cls_id},
+            {$addToSet: {subjects: req.body.cls_subjs}}, 
+            function(err, data) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log('update all:' + JSON.stringify(data) );
+                }
+        });
+        
+        
+    }else{
+        // console.log('cls_subj not exists:' + cls_subjects);
+        const cls_subjects = new Class_Subject({
+            class : req.body.cls_id
+        });        
+        //await cls_subjects.subjects.count();
+        req.body.cls_subjs.forEach(subj => {
+            cls_subjects.subjects.push(subj);
+        });
+        await cls_subjects.save();
+        
+    }
+
+    // console.log('cls_subj:' + cls_subjects);
+
+
+    res.send({
+        "response": "submitted successffully"
     });
 });
 

@@ -171,33 +171,35 @@ app.get('/routine-students', async (req,res) => {
 
 app.get('/test', async (req,res) => {
   
-    const classes = await Class.find({});
+    // const classes = await Class.find({});
 
-    classes.forEach(async (cls)=>{
+    // classes.forEach(async (cls)=>{
         // console.log("class: "+cls.name);
-        const subject = await Subject.findOne({"_id": "6218d7798d90f0425ed41b3f"});
+        // const subject = await Subject.findOne({"_id": "6218d7798d90f0425ed41b3f"});
         
-        const cls_sub = await Class_Subject.findOne({
-            "class": cls._id
-        }).populate('class').populate('subjects');
+        // const cls_sub = await Class_Subject.findOne({
+        //     "class": cls._id
+        // }).populate('class').populate('subjects');
 
-        try{
-            cls_sub.subjects.push(subject._id);
-            //await cls_sub.save();
-        }catch(e){
-            console.log(e);
-        }
+        // try{
+        //     if(cls_sub){
+        //         cls_sub.subjects.push(subject._id);
+        //         //await cls_sub.save();
+        //     }            
+        // }catch(e){
+        //     console.log(e);
+        // }
         // await cls_sub.save();
 
         // console.log("class: "+ cls_sub );
         // console.log("subject: "+ subject );
-    });
+    // });
 
     //const cls_subs = await Class_Subject.find({});
 
-    const cls_subs = await Class_Subject.find({})
-            .populate('class')
-            .populate({path: 'subjects', model: Subject});
+    // const cls_subs = await Class_Subject.find({})
+    //         .populate('class')
+    //         .populate({path: 'subjects', model: Subject});
 
             // .populate('subjects');
             // .populate({path:'class', populate: {path:'subjects', model: 'Subject'}});
@@ -205,12 +207,12 @@ app.get('/test', async (req,res) => {
             // console.log(cls_subs);
     
 
-    const sections = await Section.find({});
+    // const sections = await Section.find({});
 
     const cls_secs = await Class_Section.find({}).populate('sectionId').populate('classId');
-    // const cls_subs = await Class_Subject.find({}).populate('subjects').populate('class');
-    // console.log("Class-Sections:" + cls_secs   );
-    // console.log("Class-Subjects: "+ cls_subs);
+    const cls_subs = await Class_Subject.find({}).populate('subjects').populate('class');
+    // console.log("Class-Sections:" + cls_secs );
+    // console.log("Class-Subjects: "+ cls_subs );
 
     const weekdays = await Weekday.find({}).sort({ 'day_id': 1});
     const Subjects = await Subject.find({});
@@ -226,7 +228,7 @@ app.get('/test', async (req,res) => {
         ;
 
     // console.log(JSON.stringify(schedules) );
-    // console.log(schedules );
+    // console.log( Subjects );
 
     res.render('ejs/pages/index', {
         weekdays,
@@ -288,18 +290,6 @@ app.post('/ajax', async (req,res)=>{
     //     "session": session._id
     // });
     // console.log("Schedule: "+schedule);    
-    // schedule.session = session._id
-    // schedule.weekday = req.body.wkday_id;
-    // schedule.class = req.body.class_id;
-    // schedule.section = req.body.section_id;
-    // schedule.period_no = req.body.period_id;
-    // schedule.subject = req.body.subject_id;
-    // schedule.teacher = req.body.teacher_id;
-
-    
-
-    // console.log(schedule);
-
 
 
     res.send({
