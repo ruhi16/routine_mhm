@@ -15,12 +15,6 @@ router.get('/in-class-subjects', async(req, res)=>{
         .populate('class').populate('subjects');
         
     const Weekdays = await Weekday.find({});
-
-    // subjects.forEach(async (subj) =>{
-    //     console.log(subj.name);
-    // });
-    
-    
     
     res.render('ejs/pages/in-class-subjects',{
         clses, subjects, class_subjects, Weekdays
@@ -31,21 +25,15 @@ router.get('/in-class-subjects', async(req, res)=>{
 
 router.post('/ajax-class-subjects-submit', async(req, res) => {       
     console.log('ajax:'+ JSON.stringify(req.body) );
-    // console.log('req.class.id:' + req.body.cls_id );
-    // const filter = { _id: req.body.cls_id };
-    // const cls_subjects = await Class_Subject.findOne(filter);
 
     const cls_subjects = await Class_Subject.findOne({
         "class": req.body.cls_id
     });
 
-    // console.log('cls_subjects:'+ cls_subjects );
-
     if(cls_subjects){
         console.log('cls_subj exists'); 
 
         const data = cls_subjects.subjects;
-        // console.log('data:'+ data);
 
         Class_Subject.updateOne(
             { "class": req.body.cls_id },
@@ -75,16 +63,12 @@ router.post('/ajax-class-subjects-submit', async(req, res) => {
         const cls_subjects = new Class_Subject({
             class : req.body.cls_id
         });        
-        //await cls_subjects.subjects.count();
         req.body.cls_subjs.forEach(subj => {
             cls_subjects.subjects.push(subj);
         });
         await cls_subjects.save();
         
     }
-
-    // console.log('cls_subj:' + cls_subjects);
-
 
     res.send({
         "response": "submitted successffully"

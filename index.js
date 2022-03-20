@@ -38,6 +38,8 @@ app.use(morgan('tiny'));    //tiny, combined, dev
 const inputRoute = require('./routes/inputRoutes');
 app.use('/input/', inputRoute.router);
 
+const inputClassSections = require('./routes/inputClassSections');
+app.use('/input/', inputClassSections.router);
 
 
 

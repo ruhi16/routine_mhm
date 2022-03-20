@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>    
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+
+    <h1>Input Class Sections</h1>
+    <table class="table table-bordered">
+      <% clses.forEach(cls => { %>
+        <thead>
+          <tr>
+            <th>
+              <%= cls.name %>
+            </th>
+            <td>
+              <% sections.forEach(section => { %>
+                <% cls_sections = class_sections.filter(cls_sec => { 
+                  console.log(cls_sec);
+                  return cls_sec.classId._id.equals(cls._id);
+                }); %>           
+    
+                <% secns = cls_sections.map(cls_secns => { 
+                    return cls_secns.sections
+                  }); %>
+
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="<%= cls.name%>[]" value="<%= section._id%>" id="flexCheckDefault"
+                
+                >
+                <label class="form-check-label" for="flexCheckDefault">
+                  <%= section.name %>
+                  
+                </label>
+              </div>
+              <% }) %>
+            </td>
+            <td>
+
+            </td>
+            <td>
+              <button class="btn btn-primary btnSave" id="<%= cls.name%>"
+                data-cls_id = <%= cls._id  %>
+                data-cls_nm = <%= cls.name %>   >Save</button>
+            </td>
+            </td>
+          </tr>
+        </thead>        
+      <% }) %>
+    </table>
+
+    <% sections.forEach(section => { %>
+      <%= section.name %>  
+    <% }) %>
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">    
+    $(document).ready(function(e){
+      var cls_id = '';
+      var cls_nm = '';
+
+      $('.btnSave').click(function(){
+        cls_id = $(this).data('cls_id');
+        cls_nm = $(this).data('cls_nm');
+
+        var sections = [];
+
+        $('input[name="'+cls_nm+'[]"]:checked').each(function() {
+          // console.log(this.value);
+          sections.push(this.value);
+        });
+
+        console.log(sections);
+
+        $.ajax({
+          url: "/input/ajax-class-sections-submit",
+          method: "post",          
+          contentType: "application/json",
+          data: JSON.stringify({
+              cls_id: cls_id, cls_secns: sections
+          }),
+
+          success: function(msg){
+            console.log("success ajax:" + msg.response );
+            // console.log("success ajax:" + JSON.stringify(msg) );
+          },
+          error: function(err){
+            console.log("ajax error:" + err);
+          }
+        });
+
+
+
+
+
+
+
+
+      });
+
+    
+    });
+  </script>
+
+  </body>
+</html>

@@ -204,6 +204,22 @@ const class_sectionSchema = new mongoose.Schema({
 });
 const Class_Section = mongoose.model('Class_Section', class_sectionSchema);
 
+const class_section2Schema = new mongoose.Schema({
+    class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
+    sections: [{type: mongoose.Schema.Types.ObjectId, ref: 'Section'}],
+    
+    status: {type:String},
+    index: {type: Number},
+    dise_code: {type:String},
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+});
+const Class_Section2 = mongoose.model('Class_Section2', class_section2Schema);
+
+
+
+
+
 
 const class_subjectSchema = new mongoose.Schema({
     class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
@@ -250,6 +266,7 @@ module.exports = {
     Weekday,
     Teacher,
     Class_Section,
+    Class_Section2,
     Class_Subject,
     Teacher_Subject,    
     Schedule,
