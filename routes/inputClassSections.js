@@ -30,19 +30,18 @@ router.post('/ajax-class-sections-submit', async(req, res) => {
     });
 
 
-    req.body.cls_secns.forEach( secn => {
-        const cls_sections = await Class_Section.find({
-            classId : req.body.cls_id            
-        }); 
-        cls_sections.remove();
-    });
+    await Class_Section.deleteMany({
+        classId : req.body.cls_id            
+    }); 
+    
 
-    req.body.cls_secns.forEach( secn => {
-        const cls_section = await Class_Section.find({
+
+    req.body.cls_secns.forEach( async secn => {
+        const cls_section = new Class_Section({
             classId : req.body.cls_id,
             sectionId : secn
         }); 
-        cls_section.remove();
+        await cls_section.save();
     });
 
     
