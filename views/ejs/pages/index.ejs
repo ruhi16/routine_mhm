@@ -36,10 +36,19 @@
         <div class = "row">
           <div class = "col-sm-10">
             <table class="table table-bordered">    
+              <tr>
+                <td><strong>Class</strong></td>
+                <% for(var i=0; i< weekday.periods; i++){ %>
+                  <td class="text-center"><strong><%= i+1; %></strong></td>
+                <%}%>
+              </tr>
               <% cls_sections.forEach( (cls_section) =>{%>
+
                 <tr>
                   <td>
-                    <%= cls_section.classId.name %>-<%= cls_section.sectionId.name %><BR>Room:
+                    <strong><%= cls_section.classId.name %>-<%= cls_section.sectionId.name %></strong>
+                    <BR>
+                      <strong class="small">Room:</strong>
                   </td>   
 
                   <% for(var i=0; i< weekday.periods; i++){ %>
@@ -54,8 +63,8 @@
                       
                       <% data.map(function(d){%>
                         <%  id = d._id %>
-                        <%= d.subject.name %><br>                    
-                        <%= d.teacher.name %><br>
+                        <strong><%= d.subject.name %></strong><br/>
+                        <strong class="small"><%= d.teacher.name %></strong><br>
                       <%}) %>
 
                      
@@ -79,7 +88,9 @@
             <table class="table table-bordered">
               <% Teachers.forEach( teacher => { %>                
                 <tr>
-                  <th scope="row" class="text-center btn-warning"><%= teacher.shortName %></th>                   
+                  <th scope="row" class="text-center btn-warning">
+                    <%= teacher.shortName %>
+                  </th>
                   <td class="text-center small">
                 
                     <% data = schedules.filter(function(schedule){ 
@@ -114,34 +125,34 @@
 
 
 
-<% Subjects.forEach((subject)=>{ %>
+<!-- <% Subjects.forEach((subject)=>{ %>
     <%= subject.name %>,
-<% }); %>
+<% }); %> -->
 
-<br><br>
+<!-- <br><br>
 <% Teachers.forEach((teacher)=>{ %>
   <%= teacher.name %>,
-<% }); %>
+<% }); %> -->
 
-<br><br>
+<!-- <br><br>
 <% cls_subjects.forEach((cls_subs)=>{ %>
   <%= cls_subs.class.name %>:
   <% cls_subs.subjects.forEach((subj)=>{ %>
     <%= subj.name %>,
   <% }); %>
 <br>
-<% }); %>
+<% }); %> -->
 
 
 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button> -->
 
 <!-- <%= JSON.stringify(schedules) %> -->
-<% schedules.map(function(elem){ %>
+<!-- <% schedules.map(function(elem){ %>
   <%if( elem._id.equals('6223b45d6e090dc37bf4b613') ){ %> 
     <%= elem %><BR><BR>
   <% } %>
 <% }); -%>
-<br>
+<br> -->
 
 <% data = schedules.filter(function(elem){
   return elem._id.equals('6223b45d6e090dc37bf4b613')
@@ -151,7 +162,7 @@
 
 
 
-// modal
+<!-- modal starts -->
 <div class="modal fade bd-example-modal-lg" id="subjtechmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
