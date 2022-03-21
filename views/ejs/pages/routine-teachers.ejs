@@ -38,9 +38,9 @@
             <table class="table table-bordered table-sm">
               <thead>
               <tr>
-                <th>Name</th>
+                <th class="text-center">Name</th>
                 <% for(var i=0; i< weekday.periods; i++){ %>
-                  <th><%= i+1 %></th>
+                  <th class="text-center"><%= i+1 %></th>
                 <% } %>
               </tr>
             </thead>
@@ -48,7 +48,9 @@
 
               <% Teachers.forEach((teacher)=>{ %>
                 <tr>
-                  <td><%= teacher.name %></td>
+                  <td>
+                    <strong><%= teacher.name %> (<%= teacher.shortName %>)</strong>
+                  </td>
                   <% for(var i=0; i< weekday.periods; i++){ %>
                     <td>
                       <% data = Schedules.filter(function(schedule){ 
@@ -58,9 +60,10 @@
                       }) %>
                       <% data.map(function(d){%>
                         <%  id = d._id %>
-                        <%= d.subject.name %><br>
-                        <%= d.class.name %>
-                        <%= d.section.name %>
+                        <%= d.class.name %>-<%= d.section.name %><br>
+                        
+                        <%= d.subject.name %>
+                        
                       <%}) %>
                     </td>
                   <% } %>

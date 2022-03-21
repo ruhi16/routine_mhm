@@ -68,7 +68,7 @@
                       <%}) %>
 
                      
-                      <button class="btn btn-primary btnSave" data-toggle="modal" data-target=".bd-example-modal-lg"
+                      <button class="btn btn-primary btn-sm btnSave" data-toggle="modal" data-target=".bd-example-modal-lg"
                           data-id  ="<%= (typeof data == 'object' && data.length > 0)? id : '' %>"
                           data-wkid="<%= weekday._id %>"
                           data-clid="<%= cls_section.classId._id %>"
@@ -299,6 +299,8 @@
     
     // get subjects for class selected
     // load modal's .... select-option(s) from here dynamically
+
+    // $("#subjtechmodal").modal('hide');
      
     });
 

@@ -89,9 +89,9 @@ app.get('/routine-teachers', async (req,res) => {
     .populate('section')
     .populate('subject')
     .populate('teacher')
-    ;;
+    ;
 
-    res.render('ejs/pages/routine-teachers-pdf',{
+    res.render('ejs/pages/routine-teachers',{
         Weekdays,
         Teachers,
         Schedules        
