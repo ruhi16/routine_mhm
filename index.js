@@ -13,7 +13,7 @@ const pdf = require("html-pdf");
 
 
 const {
-    School,Session,Class, Section, Room,Subject, Weekday, Teacher, Class_Section, Class_Subject,Teacher_Subject,    
+    School,Session,Class, Section, Room, Subject, Weekday, Teacher, Class_Section, Class_Subject,Teacher_Subject,    
     Schedule, Provisional, User } = require('./models/all.model');
 
 const app = express();
@@ -34,12 +34,32 @@ app.use(bodyParser.json());
 //Log message at console
 app.use(morgan('tiny'));    //tiny, combined, dev
 
+
 // Routes
 const inputRoute = require('./routes/inputRoutes');
 app.use('/input/', inputRoute.router);
 
 const inputClassSections = require('./routes/inputClassSections');
 app.use('/input/', inputClassSections.router);
+
+const inputTeachers = require('./routes/inputTeachers');
+app.use('/teachers/', inputTeachers.router);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -78,9 +98,32 @@ app.get('/routine-provitional', async (req,res)=>{
 });
 
 
+app.get('/day-select/:day', async(req, res)=>{
+    console.log(req.params['day']);
+
+    await Weekday.updateMany({}, {status : 'inactive'});
+    const day = await Weekday.findOne({
+        name : req.params['day']
+    });    
+    day.status = 'active';
+    await day.save();
+
+
+
+
+
+    res.redirect('/test');
+});
+
+
+
+
+
+
+
 app.get('/routine-teachers', async (req,res) => {
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
-    const Teachers = await Teacher.find({});
+    const Teachers = await Teacher.find({}).sort({'index' : 1});
 
     const Schedules = await Schedule.find({})
     .populate('session')
@@ -100,7 +143,7 @@ app.get('/routine-teachers', async (req,res) => {
 
 app.get('/routine-teachers-pdf', async (req,res) => {
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
-    const Teachers = await Teacher.find({});
+    const Teachers = await Teacher.find({}).sort({'index' : 1});
 
     const Schedules = await Schedule.find({})
     .populate('session')
@@ -141,15 +184,13 @@ app.get('/routine-teachers-pdf', async (req,res) => {
             });
         }
     });
-    
-    
 });
 
 app.get('/routine-students', async (req,res) => {
     const ClsSecns = await Class_Section.find({})
         .populate('sectionId').populate('classId');
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
-    const Teachers = await Teacher.find({});
+    const Teachers = await Teacher.find({}).sort({'index' : 1});
 
     const Schedules = await Schedule.find({})
         .populate('session')
@@ -187,7 +228,7 @@ app.get('/test', async (req,res) => {
         //     if(cls_sub){
         //         cls_sub.subjects.push(subject._id);
         //         //await cls_sub.save();
-        //     }            
+        //     }
         // }catch(e){
         //     console.log(e);
         // }
@@ -206,8 +247,7 @@ app.get('/test', async (req,res) => {
             // .populate('subjects');
             // .populate({path:'class', populate: {path:'subjects', model: 'Subject'}});
             // .populate({path:'subjects', model: 'Subject'});
-            // console.log(cls_subs);
-    
+            // console.log(cls_subs);  
 
     // const sections = await Section.find({});
 
@@ -218,7 +258,7 @@ app.get('/test', async (req,res) => {
 
     const weekdays = await Weekday.find({}).sort({ 'day_id': 1});
     const Subjects = await Subject.find({});
-    const Teachers = await Teacher.find({});
+    const Teachers = await Teacher.find({}).sort({'index' : 1});
 
     const schedules = await Schedule.find({})
         .populate('session')

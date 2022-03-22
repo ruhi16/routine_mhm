@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>    
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+
+    <h1>Input Class Subjects</h1>
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript">    
+    $(document).ready(function(e){
+      var cls_id = '';
+      var cls_nm = '';
+
+
+      $('.btnSave').click(function(){
+        cls_id = $(this).data('cls_id');
+        cls_nm = $(this).data('cls_nm');
+        // var sub_all = $('input[name="V[]"]:checked').serialize();        
+        // console.log(sub_all);
+
+        // JSON.parse(sub_all).forEach(sub=>{
+        //   console.log('xx'+sub)
+        // });
+        var subjects = [];
+        
+        $('input[name="'+cls_nm+'[]"]:checked').each(function() {
+          // console.log(this.value);
+          subjects.push(this.value);
+        });
+
+        console.log(subjects);
+        // alert(cls_id+' <=> '+cls_nm+' <=> '+sub_all);
+
+
+        $.ajax({
+          url: "/input/ajax-class-subjects-submit",
+          method: "post",          
+          contentType: "application/json",
+          data: JSON.stringify({
+              cls_id: cls_id, cls_subjs: subjects
+          }),
+
+          success: function(msg){
+            console.log("success ajax:" + msg.response );
+            // console.log("success ajax:" + JSON.stringify(msg) );
+          },
+          error: function(err){
+            console.log("ajax error:" + err);
+          }
+      });
+
+      
+      });//btnSave
+    
+    });
+  </script>
+
+  </body>
+</html>

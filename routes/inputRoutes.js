@@ -11,15 +11,23 @@ router.get('/in-class-subjects', async(req, res)=>{
        "grade": "Secondary"
     });
 
+    const subjectsHS = await Subject.find({
+        "grade": "Higher Secondary"
+     });
+     console.log(subjectsHS.length);
+
     const class_subjects = await Class_Subject.find({})
         .populate('class').populate('subjects');
         
     const Weekdays = await Weekday.find({});
     
     res.render('ejs/pages/in-class-subjects',{
-        clses, subjects, class_subjects, Weekdays
+        clses, subjects, subjectsHS, class_subjects, Weekdays
     });
 });
+
+
+
 
 
 

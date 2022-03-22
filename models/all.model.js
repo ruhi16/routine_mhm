@@ -107,7 +107,7 @@ const weekdaySchema = new mongoose.Schema({
     tiffin:  {type: Number, required: true},       
     desc: {type: String},
 
-    status: {type:String},
+    status: {type:String},  // selected or not
     index: {type: Number},
     dise_code: {type:String},
     created_at: { type: Date, default: Date.now },
@@ -204,7 +204,7 @@ const class_sectionSchema = new mongoose.Schema({
 });
 const Class_Section = mongoose.model('Class_Section', class_sectionSchema);
 
-const class_section2Schema = new mongoose.Schema({
+const class_sections2Schema = new mongoose.Schema({
     class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
     sections: [{type: mongoose.Schema.Types.ObjectId, ref: 'Section'}],
     
@@ -214,7 +214,7 @@ const class_section2Schema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
 });
-const Class_Section2 = mongoose.model('Class_Section2', class_section2Schema);
+const Class_Section2 = mongoose.model('Class_Section2', class_sections2Schema);
 
 
 
