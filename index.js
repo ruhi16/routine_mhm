@@ -258,7 +258,7 @@ app.get('/test', async (req,res) => {
 
     const weekdays = await Weekday.find({}).sort({ 'day_id': 1});
     const Subjects = await Subject.find({});
-    const Teachers = await Teacher.find({}).sort({'index' : 1});
+    const Teachers = await Teacher.find({});
 
     const schedules = await Schedule.find({})
         .populate('session')
