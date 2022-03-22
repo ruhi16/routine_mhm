@@ -15,7 +15,7 @@ router.get('/', async (req,res)=>{
     teachers.forEach(async teacher => {
         teacher.index = i++;
         teacher.teacher_id = 'na';        
-        await teacher.save();        
+        // await teacher.save();        
     });
 
 
