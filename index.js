@@ -45,6 +45,10 @@ app.use('/input/', inputClassSections.router);
 const inputTeachers = require('./routes/inputTeachers');
 app.use('/teachers/', inputTeachers.router);
 
+const inputProvitional = require('./routes/inputProvitional');
+app.use('/provitional/', inputProvitional.router);
+
+
 
 
 
