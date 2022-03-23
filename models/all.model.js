@@ -116,25 +116,6 @@ const weekdaySchema = new mongoose.Schema({
 const Weekday = mongoose.model('Weekday', weekdaySchema);
 
 
-const scheduleSchema = new mongoose.Schema({
-    session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
-    weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
-    class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
-    section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
-    period_no: {type: Number, required: true},
-    subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
-    teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
-
-    status: {type:String},
-    index: {type: Number},
-    dise_code: {type:String},
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-});
-const Schedule = mongoose.model('Schedule', scheduleSchema);
-
-
-
 
 const teacherSchema = new mongoose.Schema({
     name: {type: String, required: true},
@@ -155,7 +136,29 @@ const teacherSchema = new mongoose.Schema({
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
 
+
+const scheduleSchema = new mongoose.Schema({
+    session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
+    weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
+    class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
+    section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
+    period_no: {type: Number, required: true},
+    subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
+    teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
+
+    status: {type:String},
+    index: {type: Number},
+    dise_code: {type:String},
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+});
+const Schedule = mongoose.model('Schedule', scheduleSchema);
+
+
+
+
 const provisionalSchema = new mongoose.Schema({
+    session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
     curr_date: { type: Date, default: Date.now },
     weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
     who_auth: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},

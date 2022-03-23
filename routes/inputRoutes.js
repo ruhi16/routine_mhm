@@ -14,7 +14,7 @@ router.get('/in-class-subjects', async(req, res)=>{
     const subjectsHS = await Subject.find({
         "grade": "Higher Secondary"
      });
-     console.log(subjectsHS.length);
+    //  console.log(subjectsHS.length);
 
     const class_subjects = await Class_Subject.find({})
         .populate('class').populate('subjects');

@@ -17,30 +17,55 @@
           <td>
             <%= cls.name %>
           </td>
-          <td>            
-            <% subjects.map(function(subject){ %>
-              <% cls_subjects = class_subjects.filter(cls_sub => { 
-                return cls_sub.class._id.equals(cls._id);
-              }); %>           
-  
-              <% subjs = cls_subjects.map(cls_subjs => { 
-                  return cls_subjs.subjects 
-                }); %>
+          <td>
+            <% cls_subjects = class_subjects.filter(cls_sub => { 
+              return cls_sub.class._id.equals(cls._id);
+            }); %>           
 
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="<%= cls.name%>[]" value="<%= subject._id%>" id="flexCheckDefault"
-                <% subjs.map( sub => { %>
-                  <% sub.map(s => { %>                    
-                    <%=  subject._id.equals(s._id)? 'Checked':'' %>
-                  <% }) %>             
-                <% }) %>
-                >
-                <label class="form-check-label" for="flexCheckDefault">
-                  <%= subject.name %>                  
-                  <!-- <%= subject._id %>  -->
-                </label>
-              </div>
-            <%}) %>
+            <% subjs = cls_subjects.map(cls_subjs => { 
+                return cls_subjs.subjects 
+              }); %>
+
+
+            <% if(cls.name === 'XI' || cls.name === 'XII'){ %>
+            
+              <% subjectsHS.map(function(subjectHS){ %>
+                <!-- <%= subjectHS.name %> -->
+                <div class="form-check">                
+                  <input class="form-check-input" type="checkbox" name="<%= cls.name%>[]" value="<%= subjectHS._id%>" id="flexCheckDefault"
+                    <% subjs.map( sub => { %>
+                      <% sub.map(s => { %>                    
+                        <%=  subjectHS._id.equals(s._id)? 'Checked':'' %>
+                      <% }) %>             
+                    <% }) %>
+                    >
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <%= subjectHS.name %>
+                    </label>                 
+                </div>
+              <% }); %>
+                
+
+            <% } else { %>
+              
+
+              <% subjects.map(function(subject){ %>
+                <div class="form-check">                
+                  <input class="form-check-input" type="checkbox" name="<%= cls.name%>[]" value="<%= subject._id%>" id="flexCheckDefault"
+                    <% subjs.map( sub => { %>
+                      <% sub.map(s => { %>                    
+                        <%=  subject._id.equals(s._id)? 'Checked':'' %>
+                      <% }) %>             
+                    <% }) %>
+                    >
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <%= subject.name %>                  
+                      <!-- <%= subject._id %>  -->
+                    </label>                 
+                </div>
+              <%}) %>
+
+            <% }; %>
           </td>
           <td>
 
@@ -58,6 +83,14 @@
               <% }) %>             
             <% }) %>
 
+            <!-- <% if(cls.name === 'XI' || cls.name === 'XII'){ %>
+              <% subjectsHS.map(subj=>{ %>
+                <%= subj.name %>
+              <% }); %>
+
+              <h1>foo</h1>
+            <% } %>   -->
+              
              
           </td>
           <td>
