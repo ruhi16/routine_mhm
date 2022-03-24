@@ -21,7 +21,10 @@
     Date: <%= (new Date()).toLocaleDateString('en-US') %>
     Month: <%= month %>
     Day: <%= day %>
-    
+    <br>
+    <% teachers.forEach( teacher => {%>
+      <%= teacher.name %>,
+    <% });%>
     
     <table class="table table-striped table-bordered">
         <thead>

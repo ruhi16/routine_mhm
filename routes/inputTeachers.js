@@ -10,7 +10,8 @@ router.get('/', async (req,res)=>{
 
     const teachers = await Teacher.find({}).sort({index:1});
     // console.log('xx'+ teachers.length );
-
+    
+    //for first time only
     var i = 1;
     teachers.forEach(async teacher => {
         teacher.index = i++;
@@ -27,7 +28,7 @@ router.get('/', async (req,res)=>{
 router.get('/up/:ind', async(req, res)=>{
     const ind = Number( req.params['ind'] );
     const nextInd = ind-1;
-    console.log(ind);
+    // console.log(ind);
     const teachers = await Teacher.find({});
     // const length = teachers.length;
     const length = await Teacher.find({}).count();
@@ -37,8 +38,8 @@ router.get('/up/:ind', async(req, res)=>{
         const teacher = await Teacher.findOne({index: ind});
         const teacher2 = await Teacher.findOne({index: nextInd});
 
-        console.log(teacher);
-        console.log(teacher2);
+        // console.log(teacher);
+        // console.log(teacher2);
 
         teacher.index = nextInd;
         teacher2.index = ind;
@@ -51,10 +52,12 @@ router.get('/up/:ind', async(req, res)=>{
     res.redirect('/teachers');
 });
 
+
+
 router.get('/dn/:ind', async(req, res)=>{
     const ind = Number( req.params['ind'] );
     const nextInd = ind+1;
-    console.log(ind);
+    // console.log(ind);
     const teachers = await Teacher.find({});
     const length = teachers.length;
 
@@ -62,8 +65,8 @@ router.get('/dn/:ind', async(req, res)=>{
         const teacher = await Teacher.findOne({index: ind});
         const teacher2 = await Teacher.findOne({index: nextInd});
         
-        console.log(teacher);
-        console.log(teacher2);
+        // console.log(teacher);
+        // console.log(teacher2);
 
         teacher.index = nextInd;
         teacher2.index = ind;

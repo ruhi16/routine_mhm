@@ -159,18 +159,18 @@ const Schedule = mongoose.model('Schedule', scheduleSchema);
 
 const provisionalSchema = new mongoose.Schema({
     session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
-    curr_date: { type: Date, default: Date.now },
+    curr_date: { type: Date },
     weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
     who_auth: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
-    no_of_periods: {type: Number, required: true},
+    no_of_periods: {type: Number },
     absentees: [{
         teacher:  {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
-        reason: {type: String, required: true},
+        reason: {type: String },
         periods: [{
             class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
             section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
             subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
-            period_no : {type: Number, required: true},
+            period_no : {type: Number },
             prov_teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
         }]
     }]

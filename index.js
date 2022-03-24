@@ -35,6 +35,23 @@ app.use(bodyParser.json());
 app.use(morgan('tiny'));    //tiny, combined, dev
 
 
+//set view engine
+app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "/views/"));
+// app.set("views", path.resolve(__dirname, "/views/ejs/"));
+
+
+//load assets
+app.use('/css', express.static(path.resolve(__dirname, "assets/css")));
+app.use('/img', express.static(path.resolve(__dirname, "assets/img")));
+app.use('/js' , express.static(path.resolve(__dirname, "assets/js")));
+app.use('/pdf' , express.static(path.resolve(__dirname, "assets/pdf")));
+
+
+
+
+
+
 // Routes
 const inputRoute = require('./routes/inputRoutes');
 app.use('/input/', inputRoute.router);
@@ -45,8 +62,8 @@ app.use('/input/', inputClassSections.router);
 const inputTeachers = require('./routes/inputTeachers');
 app.use('/teachers/', inputTeachers.router);
 
-const inputProvitional = require('./routes/inputProvitional');
-app.use('/provitional/', inputProvitional.router);
+const inputProvisional = require('./routes/inputProvisional');
+app.use('/provisional/', inputProvisional.router);
 
 
 
@@ -80,19 +97,6 @@ app.post('/user', (req,res)=>{
     res.send({status: 200, message: "The form submitted."})
 });
 
-
-
-//set view engine
-app.set("view engine", "ejs");
-// app.set("views", path.join(__dirname, "/views/"));
-// app.set("views", path.resolve(__dirname, "/views/ejs/"));
-
-
-//load assets
-app.use('/css', express.static(path.resolve(__dirname, "assets/css")));
-app.use('/img', express.static(path.resolve(__dirname, "assets/img")));
-app.use('/js' , express.static(path.resolve(__dirname, "assets/js")));
-app.use('/pdf' , express.static(path.resolve(__dirname, "assets/pdf")));
 
 
 app.get('/routine-provitional', async (req,res)=>{
