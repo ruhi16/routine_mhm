@@ -12,24 +12,23 @@ router.get('/routine', async(req,res)=>{
 
     
 
-    const curr_date = new Date(); //.toDateString();
-    console.log('before:'+ curr_date);
+    // const curr_date = new Date(); //.toDateString();
+    // console.log('before:'+ curr_date);
     
     process.env.TZ = 'Asia/Calcutta';
 
     const d = (new Date());    
-    console.log('d before split:' + d);
-    console.log('d iso string:' + d.toISOString());
+    console.log('full date :' + d);
+    console.log('date iso string:' + d.toISOString());
 
     let text = d.toISOString().split('T')[0];
+    console.log('date splited text:'+ text);
+    console.log('date splited full date:'+ Date(text) );
+    // console.log('date splited full date:'+ Date(text).toISOString() );
 
-    console.log('d iso string:'+ Date(text) );
-    // console.log('d iso string:'+ Date(text) );
-    console.log('d:'+text);
-    
-    
-    console.log('t:'+d.getTime());
-    console.log('tt:'+d.toLocaleTimeString());
+
+    console.log('time default:'+d.getTime());
+    console.log('time local string:'+d.toLocaleTimeString());
 
     
     
