@@ -155,8 +155,6 @@ const scheduleSchema = new mongoose.Schema({
 const Schedule = mongoose.model('Schedule', scheduleSchema);
 
 
-
-
 const provisionalSchema = new mongoose.Schema({
     session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
     curr_date: { type: Date },
@@ -166,6 +164,8 @@ const provisionalSchema = new mongoose.Schema({
     absentees: [{
         teacher:  {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
         reason: {type: String },
+        off_periods: [{type: Number}],
+        status: {type: String },
         periods: [{
             class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
             section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
@@ -176,6 +176,8 @@ const provisionalSchema = new mongoose.Schema({
     }]
 });
 const Provisional = mongoose.model('Provisional', provisionalSchema);
+
+
 
 
 const userSchema = new mongoose.Schema({

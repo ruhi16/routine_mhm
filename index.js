@@ -222,42 +222,7 @@ app.get('/routine-students', async (req,res) => {
 
 app.get('/test', async (req,res) => {
   
-    // const classes = await Class.find({});
-
-    // classes.forEach(async (cls)=>{
-        // console.log("class: "+cls.name);
-        // const subject = await Subject.findOne({"_id": "6218d7798d90f0425ed41b3f"});
-        
-        // const cls_sub = await Class_Subject.findOne({
-        //     "class": cls._id
-        // }).populate('class').populate('subjects');
-
-        // try{
-        //     if(cls_sub){
-        //         cls_sub.subjects.push(subject._id);
-        //         //await cls_sub.save();
-        //     }
-        // }catch(e){
-        //     console.log(e);
-        // }
-        // await cls_sub.save();
-
-        // console.log("class: "+ cls_sub );
-        // console.log("subject: "+ subject );
-    // });
-
-    //const cls_subs = await Class_Subject.find({});
-
-    // const cls_subs = await Class_Subject.find({})
-    //         .populate('class')
-    //         .populate({path: 'subjects', model: Subject});
-
-            // .populate('subjects');
-            // .populate({path:'class', populate: {path:'subjects', model: 'Subject'}});
-            // .populate({path:'subjects', model: 'Subject'});
-            // console.log(cls_subs);  
-
-    // const sections = await Section.find({});
+   
 
     const cls_secs = await Class_Section.find({}).populate('sectionId').populate('classId').sort({'index': 1});
     const cls_subs = await Class_Subject.find({}).populate('subjects').populate('class');
