@@ -9,6 +9,14 @@
     <header>
       <%- include('../partials/header'); %>
     </header>
+    <% selected_day = weekdays.filter( wkday =>{
+      return wkday.status === 'active';
+    }) %>
+    <% var wkday = selected_day[0].day_id; %>
+    <%= wkday %>
+
+
+    
     <%  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const d = new Date();
@@ -29,12 +37,15 @@
     <br>
     <% provisionals.forEach( provisional => { %>
       <!-- <%= provisional.absentees %> -->
-      <% provisional.absentees.map( trs =>{ %>
-        <!-- <%= trs %> -->
+      <% provisional.absentees.map( teacher =>{ %>
+        <!-- <%= teacher %> -->
       <% }) %>
     <% }); %>
 
     <% var n = Number(weekday.periods) %>
+
+
+
 
     <table class="table table-striped table-bordered">
       <thead>
@@ -45,11 +56,9 @@
             <% for (var i = 1; i <= n;  i++ ) { %>
               <th class="text-center"><%= i %></th>
             <% } %>
-          <!-- <th scope="col">Reason </th>
-          <th scope="col">Off Periods</th> -->
+
           <th scope="col" class="text-center">Actions
-              <button type="button" id="btnAdd" class="btn btn-primary ml-5"  data-toggle="modal" data-target=".bd-example-modal-lg">Add</button>
-              
+              <button type="button" id="btnAdd" class="btn btn-primary ml-5"  data-toggle="modal" data-target="#absTeacherAssignModal">Add</button>              
           </th>
         </tr>
       </thead>
@@ -57,14 +66,13 @@
 
         <% provisionals.forEach( provisional => { %>
           <!-- <%= provisional.absentees %> -->
-          <% provisional.absentees.map( trs =>{ %>
-
+          <% provisional.absentees.map( absentee =>{ %>
             <tr>
               <td></td>
               <th scope="col">                
-                <%= trs.teacher.name %><br>
+                <%= absentee.teacher.name %><br>
                 <p class="small">
-                  <%= trs.reason %> [<%= trs.off_periods %>]
+                  <%= absentee.reason %> [<%= absentee.off_periods %>]
                 </p>
               </th>
 
@@ -72,55 +80,80 @@
                 <!-- <%= n %> -->
                 <% for (var i =1; i <= n;  i++ ) { %>
                   <td>
-                    
-                    <% sch = schedules.filter( schedule => { %>
-                      <% return schedule.teacher.equals(trs.teacher) &&
-                          schedule.period_no === i
-                      %>
-                    <% }); %>
-                      
-                    <% sch.forEach( sc => { %>
-                      <%= sc.class.name %>-<%= sc.section.name %><br>
-                      <p class="small"> <%= sc.subject.name %></p>
-                    <% }); %>
-
-                  </td>                  
+                    <!-- <%= absentee.teacher.name %> -->
+                    <% absentee.periods.forEach( period => { %>
+                      <% if( period.period_no === i){ %>
+                        <b><%= period.class.name %>-<%= period.section.name %></b><br/>
+                        <small><%= period.subject.name %></small><br/>  
+                        To: <b><%= %></b><br>
+                        <!-- <button class="btn btn-primary btn-sm btnProvAssign" data-toggle="modal" data-target=".bd-example-modal-lg">Assign</button>                       -->
+                        <button class="btn btn-primary btn-sm" id="btnProvAssign" data-toggle="modal" data-target="#provClassAssignModal">Assign</button>
+                      <% } %>
+                    <% }) %>
+                  </td>
                 <% } %>
-              
-
-              
-              <!-- <th scope="col">
-                <%= trs.reason %>
-              </th>
-              <td>
-                <%= trs.off_periods %>
-              </td> -->
               
               <td>
                 <button class="btn btn-warning">Present</button>
               </td>
             </tr>
-            <!-- xx<%= trs %>xx -->
-            <!-- // =================== -->
+            
+            <% }) %>
+          <% }); %>
             <tr>
               <th></th>
               <th scope="col">
-                <p class="small"></p>
+                Sch Teacher
               </th>              
-              <% var n = Number(weekday.periods) %>                
-              <% for (var i =1; i <= n;  i++ ) { %>
-                <td></td>
+              <% var n = Number(weekday.periods) %>
+              <% var periodWiseFreeTeachers = [] %>
+
+              <% for (var i = 1; i <= n;  i++ ) { %>
+                <td>
+                  <% var scheduledTeachers = [] %>
+                  <% schedules.forEach( schedule => { %>
+                    <% if(schedule.period_no === i ){ %>
+                      <% scheduledTeachers.push( schedule.teacher._id )  %>
+                      <!-- <%= schedule.teacher.name %>, -->
+                    <%}%>
+                  <% }); %>
+                  
+                  <% var periodPrTeachers = teachers.filter( teacher => {%>
+                    <% return ! JSON.stringify(scheduledTeachers).includes(teacher._id) %>
+                  <% }); %>
+
+                  <% periodPrTeachers.forEach(prPrTeacher => {%> 
+                    <!-- <%= prPrTeacher.name %><br> -->
+                  <% }) %>
+                </td>
+                <% periodWiseFreeTeachers.push(periodPrTeachers) %>
               <% } %>
               
               <td></td>
             </tr>
+            <!-- <tr>
+              <th></th>
+              <th scope="col">
+                Prov Teacher
+              </th>              
+              <% var n = Number(weekday.periods) %>   
+              <% for (var i = 1; i <= n;  i++ ) { %>
+                <td>
+                  <% schedules.forEach( schedule => { %>
+                    <% if(schedule.period_no === i ){ %>
+                      <%= schedule.teacher.name %>,
+                    <% } %>
+                  <% }); %>
+                </td>
+              <% } %>
+              
+              <td></td>
+            </tr> -->
 
-          <% }) %>
-        <% }); %>
 
       </tbody>
     </table>
-    
+    <!-- <%= (periodWiseFreeTeachers[0]) %> -->
 
       <div class="row">
         <div class="col-md-12 text-right">
@@ -129,32 +162,105 @@
         </div>
       </div>
 
-      <% schedules.forEach(schedule=>{%>
-        <%= schedule.teacher.name %><br/>
+      <!-- <h1>All Teachers List:</h1>
+      <% teachers.forEach(teacher =>{%>
+        <%= teacher.name %>,
       <% }); %>
 
+      <h1>Absent Teachers List:</h1>
+      <% var absentTeachers = []; %>
+      <% provisionals[0].absentees.forEach(absentee=>{%>
+        <% absentTeachers.push(absentee.teacher); %>
+        <%= absentee.teacher.name %><br/>
+      <% }); %>
+
+      <% absentTeachers.forEach( absentTeacher => { %>
+        <%= absentTeacher %>
+      <% }); %>
+
+      <h1>Present Teachers List:</h1>
+      <% var presentTeachers = []; %>
+      <% teachers.forEach(teacher =>{%>
+        <% absentTeachers.filter( abt => { %>
+          <% if(! abt._id.equals(teacher._id) ){ %>
+            <% presentTeachers.push(teacher) %>
+          <% } %>
+
+          <% return abt._id.equals(teacher._id) %>
+        <% }); %>
+        
+      <% }); %>
+
+      <% presentTeachers.forEach( presentTeacher => { %>
+        <%= presentTeacher.name %>,
+      <% }); %>
+      <br/>
+      
+      
+      <% var n = Number(weekday.periods) %>                
+      <% for (var i =0; i < n;  i++ ) { %>
+          i:<%= i+1%>
+          <% schedules.forEach( schedule => { %>
+            <% if(schedule.period_no === (i+1) ){ %>
+              
+              <%= schedule.teacher.name %>,
+            <%}%>
+          <% }); %>
+          <br/>
+      <% } %> -->
+    
+
+
+      <!-- <h1>Scheduled Teachers List:</h1>
+      <% schedules.forEach(schedule=>{%>
+        <%= schedule.teacher.name %><br/>
+      <% }); %> -->
+
+      <!-- modal -->
+      <div class="modal fade bd-example-modal-lg" id="provClassAssignModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+
+            <!-- <form action="#" method="post"> -->
+              <div class="modal-header">Provisional Teacher Assignement</div>
+              <div class="modal-body">
+                
+                <div class="form-group row">
+                  <label for="provTeacher" class="col-sm-2 col-form-label">Teacher</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="provTeacher" name="provTeacher">                     
+      
+                    </select>
+                  </div>
+                </div>                
+                
+            </div>
+            <div class="modal-footer">        
+              <button class="btn btn-info float-right mr-2" data-dismiss="modal">Cancel</button>
+              <button type="submit" id="btnTeacherSubmit" class="btn btn-warning float-right">Submit</button>
+
+              <!-- <a class="btn btn-danger" data-dismiss="modal" value="Close" >Close</a> -->
+            </div>
+          <!-- </form> -->
+          </div>
+        </div>
+      </div>
 
 
 
       <!-- modal -->
-      <div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal fade bd-example-modal-lg" id="absTeacherAssignModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
 
             <form action="#" method="post">
               <div class="modal-header">Title</div>
               <div class="modal-body">
-      
-              
-      
-
-      
                 
                 <div class="form-group row">
                   <label for="teacher" class="col-sm-2 col-form-label">Teacher</label>
                   <div class="col-sm-10">
-                    <select class="form-control" id="teacher" name="teacher">
-                      
+                    <select class="form-control" id="teacher" name="teacher">                     
       
                     </select>
                   </div>
@@ -220,22 +326,6 @@
 
                 </div>
                 
-
-                <!-- <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group form-check">
-                  <input type="checkbox" class="form-check-input" name="checked" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div> -->
-                
-                
             </div>
             <div class="modal-footer">        
               <button class="btn btn-info float-right mr-2" data-dismiss="modal">Cancel</button>
@@ -267,68 +357,71 @@
 
 <script type="text/javascript" >
   $(document).ready(function(e){
-    $('#btnAdd').click(function(){
-      var teachers = '<%- JSON.stringify(teachers) %>';
-      var teachersObj = JSON.parse(teachers);
-      // alert('hhh');
+    var teachers = '<%- JSON.stringify(teachers) %>';
+    var teachersObj = JSON.parse(teachers);
 
-      $('#teacher').empty();
-      $('#teacher').append('<option name="" value="">Select</option>');
-      for (const teacher of teachersObj) {     
-        // if(!allotedTeachersArr.includes(teacher._id)){        
-          $('#teacher').append('<option value = "'+ teacher._id +'">'+ teacher.name +'</option>');        
-        // }
-     
-    }
+    $('#btnProvAssign').click(function(){
+      
+        $('#provTeacher').empty();
+        $('#provTeacher').append('<option name="" value="">Select</option>');
+        for (const teacher of teachersObj) {
+          $('#provTeacher').append(
+            '<option value = "'+ teacher._id +'">'+ teacher.name +'</option>'
+          );
+        }
+    });
+
+
+
+    $('#btnAdd').click(function(){            
+
+        $('#teacher').empty();
+        $('#teacher').append('<option name="" value="">Select</option>');
+        for (const teacher of teachersObj) {     
+          // if(!allotedTeachersArr.includes(teacher._id)){        
+            $('#teacher').append('<option value = "'+ teacher._id +'">'+ teacher.name +'</option>');        
+          // }
+      
+        }
 
     });
 
     $('#btnSubmit').click(function(e){
 
-      // alert('submit');
-      // $('.modal:visible').modal('toggle');
     });
 
-    // $('#modal').on('shown.bs.modal', function () {
-    // alert('submit');
-    //   $('#teacher').trigger('focus')
-    // });
     $("form").on("submit", function(event){
-      event.preventDefault();
-      // alert('submit');
-      var tech = $('#teacher').val();
-      var resn = $('#reason').val();
-      
-      var array = [];
-      $("input:checkbox[name=periods]:checked").each(function() {
-          array.push($(this).val());
-          alert($(this).val());
-          // array.push();
-      });
-      // alert(tech+'='+resn+'='+array);
+        event.preventDefault();
+        
+        var tech = $('#teacher').val();
+        var resn = $('#reason').val();
+        
+        var array = [];
+        $("input:checkbox[name=periods]:checked").each(function() {
+            array.push($(this).val());
+            alert($(this).val());
+            // array.push();
+        });
+        // alert(tech+'='+resn+'='+array);
 
-      $.ajax({
-        url: "/provisional/ajax/teacher-submit",
-        method: "post",
-        // dataType: "json",
-        // async: false,
-        contentType: "application/json",
-        data: JSON.stringify({
-            teacher: tech, reason: resn
-        }),
+        $.ajax({
+          url: "/provisional/ajax/teacher-submit",
+          method: "post",
+          // dataType: "json",
+          // async: false,
+          contentType: "application/json",
+          data: JSON.stringify({
+              teacher: tech, reason: resn
+          }),
 
-        success: function(msg){
-          console.log("success ajax:" + msg.response );
-          // console.log("success ajax:" + JSON.stringify(msg) );
-        },
-        error: function(err){
-          console.log("error:"+err);
-        }
-      });
-
-
-
-
+          success: function(msg){
+            console.log("success ajax:" + msg.response );
+            // console.log("success ajax:" + JSON.stringify(msg) );
+          },
+          error: function(err){
+            console.log("error:"+err);
+          }
+        });
 
     });
 

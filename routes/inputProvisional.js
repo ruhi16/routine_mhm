@@ -39,6 +39,8 @@ router.get('/routine', async(req,res)=>{
     const weekday = await Weekday.findOne({
         name: today
     });
+
+    const weekdays = await Weekday.find({}).sort({'day_id':1});
     // console.log('weekday:'+weekday);
     const schedules = await Schedule.find({
         session: session,
@@ -87,33 +89,55 @@ router.get('/routine', async(req,res)=>{
     const provisionals = await Provisional.find({
         curr_date: (new Date(withoutTime)).toISOString()
     })
-    .populate({
+    .populate('session')
+    .populate({        
         path: 'absentees',
         populate: {
             path: 'teacher',
             model: 'Teacher',
+        }    
+    })
+    .populate({        
+        path: 'absentees',
+        populate: {
+            path: 'periods',
             populate: {
-                path: 'periods',
-                model: 'Section'                
-            }
-        }
-    });
-    console.log(JSON.stringify(provisionals) );
-
-    // provisionals
-
-    // const prov_detals = provisionals.populate({ 
+                path: 'class',
+                model: 'Class'
+            }            
+        }, 
+    })
+    // .populate({        
     //     path: 'absentees',
     //     populate: {
-    //       path: 'teacher'
-          
-    //     }
-    // });
-    // console.log(prov_detals);
+    //         path: 'periods',
+    //         populate: {
+    //             path: 'section',
+    //             model: 'Section'
+    //         }            
+    //     }, 
+    // })
+    .populate({        
+        path: 'absentees.periods.section',
+        model: 'Section'        
+    })
+    .populate({        
+        path: 'absentees',
+        populate: {
+            path: 'periods',
+            populate: {
+                path: 'subject',
+                model: 'Subject'
+            }            
+        }, 
+    })
+
+    ;
+    // console.log('JSON Prov: '+JSON.stringify(provisionals) );
 
 
     res.render('ejs/pages/routine-provitional',{
-        session, weekday, teachers, provisionals, schedules
+        session, weekday, weekdays, teachers, provisionals, schedules
     });
 });
 
@@ -163,7 +187,7 @@ router.post('/ajax/teacher-submit', async (req, res) => {
             periods.push({
                 class: sch.class,
                 section: sch.section,
-                subject: sch.section,
+                subject: sch.subject,
                 period_no : sch.period_no
             });
         });
@@ -179,12 +203,7 @@ router.post('/ajax/teacher-submit', async (req, res) => {
 
         });
 
-
-
-
-
-        // await curr_provisional.save();
-
+        await curr_provisional.save();
         console.log(curr_provisional);
 
 
