@@ -24,9 +24,8 @@
         let today = days[d.getDay()];        
     %>
 
-    <h1>Provitional Routine</h1>
-    Session: <%= session.name %>
-    Date: <%= (new Date()).toLocaleDateString('en-US') %>
+    <h1>Provitional Routine for <%= today %> <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small></h1>
+    Session: <%= session.name %>    
     Month: <%= month %>
     Day: <%= today %>
     <br>
@@ -87,7 +86,12 @@
                         <small><%= period.subject.name %></small><br/>  
                         To: <b><%= %></b><br>
                         <!-- <button class="btn btn-primary btn-sm btnProvAssign" data-toggle="modal" data-target=".bd-example-modal-lg">Assign</button>                       -->
-                        <button class="btn btn-primary btn-sm" id="btnProvAssign" data-toggle="modal" data-target="#provClassAssignModal">Assign</button>
+                        <button class="btn btn-primary btn-sm btnProvAssign" id="btnProvAssign" data-toggle="modal" data-target="#provClassAssignModal"
+                          data-prd_no = <%= i %>
+                          data-day_id = <%= provisional._id %>
+                          data-abs_id = <%= absentee._id %>
+                          data-prd_id = <%= period._id %>
+                          >Assign</button>
                       <% } %>
                     <% }) %>
                   </td>
@@ -123,7 +127,7 @@
                   <% }); %>
 
                   <% periodPrTeachers.forEach(prPrTeacher => {%> 
-                    <%= prPrTeacher.name %><br>
+                    <!-- <%= prPrTeacher.name %><br> -->
                   <% }) %>
                 </td>
                 <% periodWiseFreeTeachers.push(periodPrTeachers) %>
@@ -162,66 +166,14 @@
         </div>
       </div>
 
-      <!-- <h1>All Teachers List:</h1>
-      <% teachers.forEach(teacher =>{%>
-        <%= teacher.name %>,
-      <% }); %>
-
-      <h1>Absent Teachers List:</h1>
-      <% var absentTeachers = []; %>
-      <% provisionals[0].absentees.forEach(absentee=>{%>
-        <% absentTeachers.push(absentee.teacher); %>
-        <%= absentee.teacher.name %><br/>
-      <% }); %>
-
-      <% absentTeachers.forEach( absentTeacher => { %>
-        <%= absentTeacher %>
-      <% }); %>
-
-      <h1>Present Teachers List:</h1>
-      <% var presentTeachers = []; %>
-      <% teachers.forEach(teacher =>{%>
-        <% absentTeachers.filter( abt => { %>
-          <% if(! abt._id.equals(teacher._id) ){ %>
-            <% presentTeachers.push(teacher) %>
-          <% } %>
-
-          <% return abt._id.equals(teacher._id) %>
-        <% }); %>
-        
-      <% }); %>
-
-      <% presentTeachers.forEach( presentTeacher => { %>
-        <%= presentTeacher.name %>,
-      <% }); %>
-      <br/>
       
-      
-      <% var n = Number(weekday.periods) %>                
-      <% for (var i =0; i < n;  i++ ) { %>
-          i:<%= i+1%>
-          <% schedules.forEach( schedule => { %>
-            <% if(schedule.period_no === (i+1) ){ %>
-              
-              <%= schedule.teacher.name %>,
-            <%}%>
-          <% }); %>
-          <br/>
-      <% } %> -->
-    
-
-
-      <!-- <h1>Scheduled Teachers List:</h1>
-      <% schedules.forEach(schedule=>{%>
-        <%= schedule.teacher.name %><br/>
-      <% }); %> -->
 
       <!-- modal -->
       <div class="modal fade bd-example-modal-lg" id="provClassAssignModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
 
-            <!-- <form action="#" method="post"> -->
+            <form action="#" id="provClassAssignForm" method="post">
               <div class="modal-header">Provisional Teacher Assignement</div>
               <div class="modal-body">
                 
@@ -241,7 +193,7 @@
 
               <!-- <a class="btn btn-danger" data-dismiss="modal" value="Close" >Close</a> -->
             </div>
-          <!-- </form> -->
+          </form>
           </div>
         </div>
       </div>
@@ -253,8 +205,8 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
 
-            <form action="#" method="post">
-              <div class="modal-header">Title</div>
+            <form method="post" id="provTeacherAssignForm">
+              <div class="modal-header">Absentee Teachers</div>
               <div class="modal-body">
                 
                 <div class="form-group row">
@@ -278,9 +230,9 @@
                   </div>
                 </div>
 
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                   <label for="reason" class="col-sm-2 col-form-label">Periods</label>
-                  <!-- <div class="col-sm-10"> -->
+                  <div class="col-sm-10">
 
                     <div class="col-sm-1 form-check-inline">
                       <label class="form-check-label">
@@ -322,9 +274,9 @@
                         <input type="checkbox" class="form-check-input" name="periods[]" value="8">8th
                       </label>
                     </div>
-                  <!-- </div> -->
+                  </div>
 
-                </div>
+                </div> -->
                 
             </div>
             <div class="modal-footer">        
@@ -339,9 +291,19 @@
         </div>
       </div>
 
+      <h1>Absent Teachers List:</h1>
+      <% var absentTeachers = []; %>
+      <% provisionals[0].absentees.forEach(absentee=>{%>
+        <% absentTeachers.push(absentee.teacher); %>
+        <%= absentee.teacher.name %><br/>
+      <% }); %>
+
+
     <footer>
       <%- include('../partials/footer'); %>
     </footer>
+
+
 
 
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -360,11 +322,26 @@
     var teachers = '<%- JSON.stringify(teachers) %>';
     var teachersObj = JSON.parse(teachers);
 
-    $('#btnProvAssign').click(function(){
-      
+    $('.btnProvAssign').click(function(){
+        var prWiseFreeTeachers = '<%- JSON.stringify(periodWiseFreeTeachers) %>';
+        var prWiseFreeTeachersObj = JSON.parse(prWiseFreeTeachers);
+        
+        var prd_no = $(this).data('prd_no');        
+        var day_id = $(this).data('day_id');
+        var abs_id = $(this).data('abs_id');
+        var prd_id = $(this).data('prd_id');
+        
+        console.log('prov day:' + day_id);
+        console.log('prov day > absentee:' + abs_id);
+        console.log('prov day > absentee > off_period:' + prd_id);
+        console.log('prov day > absentee > off_period No:' + prd_no);
+
+        // console.log(prd_no);
+        // console.log(prWiseFreeTeachersObj[prd_no-1]);
+
         $('#provTeacher').empty();
         $('#provTeacher').append('<option name="" value="">Select</option>');
-        for (const teacher of teachersObj) {
+        for (const teacher of prWiseFreeTeachersObj[prd_no-1]) {
           $('#provTeacher').append(
             '<option value = "'+ teacher._id +'">'+ teacher.name +'</option>'
           );
@@ -373,7 +350,7 @@
 
 
 
-    $('#btnAdd').click(function(){            
+    $('#btnAdd').click(function(){
 
         $('#teacher').empty();
         $('#teacher').append('<option name="" value="">Select</option>');
@@ -389,6 +366,10 @@
     $('#btnSubmit').click(function(e){
 
     });
+
+    // $("#provClassAssignForm").on("submit", function(event){
+    //   alert('submitted')
+    // });
 
     $("form").on("submit", function(event){
         event.preventDefault();
