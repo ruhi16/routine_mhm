@@ -10,31 +10,16 @@ router.get('/routine', async(req,res)=>{
     const session = await Session.findOne({status: "active"});
     // console.log(session);
 
-    
+    // process.env.TZ = 'Asia/Calcutta';
 
-    // const curr_date = new Date(); //.toDateString();
-    // console.log('before:'+ curr_date);
-    
-    process.env.TZ = 'Asia/Calcutta';
-
-    const d = (new Date());    
-    console.log('full date :' + d);
-    console.log('date iso string:' + d.toISOString());
-
-    let text = d.toISOString().split('T')[0];
-    console.log('date splited text:'+ text);
-    console.log('date splited full date:'+ Date(text) );
-    // console.log('date splited full date:'+ Date(text).toISOString() );
-
-
-    console.log('time default:'+d.getTime());
-    console.log('time local string:'+d.toLocaleTimeString());
-
-    const curr_date = new Date();
-    // console.log(curr_date);
-    // console.log( curr_date.toISOString() );
+    const curr_date = new Date();    
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const today = days[curr_date.getDay()];
+    
+    const curr_date_split = curr_date.toISOString().split('T')[0];    
+    curr_date_split_dt = new Date(curr_date_split);
+
+    console.log(curr_date_split_dt);
 
     const weekday = await Weekday.findOne({
         name: today
@@ -45,9 +30,7 @@ router.get('/routine', async(req,res)=>{
     const schedules = await Schedule.find({
         session: session,
         weekday: weekday
-       
-               
-    })
+    }).sort({ period_no : 1 })
     .populate('session')
     .populate('weekday')
     .populate('class')
@@ -55,7 +38,7 @@ router.get('/routine', async(req,res)=>{
     .populate('subject')
     .populate('teacher')
     ;
-    console.log('schedule:'+schedules)
+    // console.log('schedule:'+schedules)
 
 
 
@@ -63,7 +46,7 @@ router.get('/routine', async(req,res)=>{
     
     
     const provistional = await Provisional.findOne({
-        curr_date: text
+        curr_date: curr_date_split_dt.toISOString()
     });
 
     if(provistional){
@@ -73,7 +56,7 @@ router.get('/routine', async(req,res)=>{
         console.log('not exists');
         const prov = new Provisional({
             session: session,
-            curr_date: text
+            curr_date: curr_date_split_dt.toISOString()
         });
         await prov.save();
         // console.log(prov);
@@ -82,12 +65,12 @@ router.get('/routine', async(req,res)=>{
     const date = new Date();
     const [withoutTime] = date.toISOString().split('T');
     console.log(withoutTime); // 👉️ 2022-01-18
-    console.log( (new Date(withoutTime)).toISOString() ); // 👉️ 2022-01-18
+    // console.log( (new Date(withoutTime)).toISOString() ); // 👉️ 2022-01-18
 
     
     const teachers = await Teacher.find({});
     const provisionals = await Provisional.find({
-        curr_date: (new Date(withoutTime)).toISOString()
+        curr_date: (new Date(curr_date_split)).toISOString()
     })
     .populate('session')
     .populate({        
@@ -141,6 +124,23 @@ router.get('/routine', async(req,res)=>{
     });
 });
 
+router.post('/ajax/provisional-teacher-submit', async (req, res) => {
+    console.log(req.body);
+
+    const prov_class = await Provisional.findById(
+        req.body.provisional_day_id
+    );
+
+    console.log( (prov_class) );
+
+
+
+
+    res.send({
+        "response":"ajax provisional class wise teacher submit success"
+        // "message": JSON.stringify(req.body)
+    });
+});
 
 router.post('/ajax/teacher-submit', async (req, res) => {
     console.log(req.body);
@@ -180,7 +180,7 @@ router.post('/ajax/teacher-submit', async (req, res) => {
         // const teacher = Teacher.findById(req.body.teacher);
         // console.log('xxteacher:'+teacher);
 
-        console.log(schedules);
+        // console.log(schedules);
         periods = [];
         schedules.map( sch => {
             console.log('sch:'+sch);
@@ -191,7 +191,7 @@ router.post('/ajax/teacher-submit', async (req, res) => {
                 period_no : sch.period_no
             });
         });
-        console.log('periods:'+ JSON.stringify(periods) );
+        // console.log('periods:'+ JSON.stringify(periods) );
 
 
         curr_provisional.absentees.push({
