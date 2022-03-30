@@ -187,7 +187,7 @@ app.get('/routine-teachers-pdf', async (req,res) => {
                     const file = fs.createWriteStream("assets/pdf/TeachersRoutine.pdf");
                     // res.pipe(file);
                     // res.render('assets/pdf/TeachersRoutine.pdf');
-                    res.download("pdf/TeachersRoutine.pdf");
+                    res.download("assets/pdf/TeachersRoutine.pdf");
                     // res.send('<a href="assets/pdf/TeachersRoutine.pdf" download>Download</a>');
                 }
             });
