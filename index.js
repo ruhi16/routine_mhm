@@ -187,7 +187,7 @@ app.get('/routine-teachers-pdf', async (req,res) => {
                     const file = fs.createWriteStream("assets/pdf/TeachersRoutine.pdf");
                     // res.pipe(file);
                     // res.render('assets/pdf/TeachersRoutine.pdf');
-                    res.download("assets/pdf/TeachersRoutine.pdf");
+                    res.download("pdf/TeachersRoutine.pdf");
                     // res.send('<a href="assets/pdf/TeachersRoutine.pdf" download>Download</a>');
                 }
             });
@@ -222,8 +222,6 @@ app.get('/routine-students', async (req,res) => {
 
 
 app.get('/test', async (req,res) => {
-  
-   
 
     const cls_secs = await Class_Section.find({}).populate('sectionId').populate('classId').sort({'index': 1});
     const cls_subs = await Class_Subject.find({}).populate('subjects').populate('class');
