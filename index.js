@@ -49,7 +49,7 @@ app.use('/pdf' , express.static(path.resolve(__dirname, "assets/pdf")));
 app.use('/fonts' , express.static(path.resolve(__dirname, "assets/fonts")));
 
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
