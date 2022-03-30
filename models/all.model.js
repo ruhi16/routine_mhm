@@ -171,7 +171,7 @@ const provisionalSchema = new mongoose.Schema({
             section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
             subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
             period_no : {type: Number },
-            prov_teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
+            teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
         }]
     }]
 });

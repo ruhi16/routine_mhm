@@ -105,6 +105,10 @@ router.get('/routine', async(req,res)=>{
         model: 'Section'        
     })
     .populate({        
+        path: 'absentees.periods.teacher',
+        model: 'Teacher'
+    })
+    .populate({        
         path: 'absentees',
         populate: {
             path: 'periods',
@@ -127,11 +131,34 @@ router.get('/routine', async(req,res)=>{
 router.post('/ajax/provisional-teacher-submit', async (req, res) => {
     console.log(req.body);
 
-    const prov_class = await Provisional.findById(
-        req.body.provisional_day_id
-    );
+    const prov_assigned_teacher = await Teacher.findOne({ 
+        '_id': req.body.provisional_teacher_id
+    });
+    console.log(prov_assigned_teacher);
 
-    console.log( (prov_class) );
+    const prov_class = await Provisional.findOne({
+        '_id': req.body.provisional_day_id,
+        // 'absentees._id': req.body.absentee_id,
+        // 'absentees.periods._id': req.body.period_id,
+    });
+
+    prov_class.absentees.map( absentee => {
+        // console.log('abs:' + absentee);
+        if(absentee._id.equals(req.body.absentee_id)){
+            const period = absentee.periods.find( period => {
+                return period._id.equals(req.body.period_id);
+            });
+            period.set({'teacher': prov_assigned_teacher});
+        }
+    });
+
+    await prov_class.save();
+
+
+
+
+    // console.log( (prov_class) );
+
 
 
 

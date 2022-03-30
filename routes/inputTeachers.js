@@ -5,6 +5,36 @@ const {
 
 const router = express.Router();
 
+const pdfMake = require('pdfmake');
+const fs = require('fs');
+
+var fonts = {
+    Roboto: {
+        normal: 'assets/fonts/Roboto-Medium.ttf',
+        bold: 'assets/fonts/Roboto-Bold.ttf',
+        italics: 'assets/fonts/Roboto-Italic.ttf',
+        bolditalics: 'assets/fonts/Roboto-BoldItalic.ttf',
+    }
+};
+
+
+let printer = new pdfMake(fonts);
+let pdfData = {
+    content: [
+        "Hello World Students..."
+    ],
+
+}
+
+let pdfDoc = printer.createPdfKitDocument(pdfData);
+
+
+pdfDoc.pipe(fs.createWriteStream('assets/pdf/abc.pdf'));
+pdfDoc.end();
+
+
+
+
 
 router.get('/', async (req,res)=>{
 
@@ -18,6 +48,21 @@ router.get('/', async (req,res)=>{
         teacher.teacher_id = 'na';        
         // await teacher.save();        
     });
+
+    let printer = new pdfMake(fonts);
+    let pdfData = {
+    content: [
+        "Hello World Students..."
+    ],
+
+}
+
+let pdfDoc = printer.createPdfKitDocument(pdfData);
+
+
+pdfDoc.pipe(fs.createWriteStream('assets/pdf/abc.pdf'));
+pdfDoc.end();
+
 
 
     res.render('ejs/pages/in-teachers', {

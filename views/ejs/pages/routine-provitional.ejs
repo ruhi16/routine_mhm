@@ -31,9 +31,10 @@
 
 
     <h1>Provitional Routine for <%= today %> <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small></h1>
-    Session: <%= session.name %>    
-    Month: <%= month %>
-    Day: <%= today %>
+    Session: <%= session.name %>,
+    Month: <%= month %>,
+    Date: <%= d.getDate() %>,
+    Day: <%= today %>,
     <br>
 
     <% teachers.forEach( teacher => {%>
@@ -48,6 +49,25 @@
     <% }); %>
 
     <% var n = Number(weekday.periods) %>
+
+    <!-- <% 
+      var currentTime = new Date();
+      var currentOffset = currentTime.getTimezoneOffset();      
+      var ISTOffset = 330;   // IST offset UTC +5:30       
+      var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);      
+      var hoursIST = ISTTime.getHours();
+      var minutesIST = ISTTime.getMinutes();
+    %> -->
+
+    <!-- <% date = ISTTime.getFullYear()+'-'+(ISTTime.getMonth()+1)+'-'+ISTTime.getDate() %>
+    <%= date %>
+    <% var dd = new Date(date) %> -->
+    
+    <!-- <%= ISTTime.getFullYear() %><br>
+    <%= ISTTime.getMonth()+1 %><br>
+    <%= ISTTime.getDate() %><br> -->
+    <!-- <%= ISTTime.toISOString() %>
+    <%= currentOffset %> -->
 
 
 
@@ -88,9 +108,18 @@
                     <!-- <%= absentee.teacher.name %> -->
                     <% absentee.periods.forEach( period => { %>
                       <% if( period.period_no === i){ %>
+                        
                         <b><%= period.class.name %>-<%= period.section.name %></b><br/>
                         <small><%= period.subject.name %></small><br/>  
-                        To: <b><%= %></b><br>
+                        To: <b>
+                          <!-- <%var str =  JSON.stringify(period.teacher) %>
+                          gg<%= str %>gg -->
+                          <% if(period.teacher){ %>
+                            <%= period.teacher.name %>
+                          <% } %>
+                          
+                        </b><br>
+
                         <!-- <button class="btn btn-primary btn-sm btnProvAssign" data-toggle="modal" data-target=".bd-example-modal-lg">Assign</button>                       -->
                         <button class="btn btn-primary btn-sm btnProvAssign" id="btnProvAssign" data-toggle="modal" data-target="#provClassAssignModal"
                           data-prd_no = <%= i %>
@@ -185,12 +214,12 @@
             <form action="#" id="provClassAssignForm" name="provClassAssignForm" method="post">
               <div class="modal-header">Provisional Teacher Assignement</div>
               <div class="modal-body">
-                
+
                 <div class="form-group row">
                   <label for="provTeacher" class="col-sm-2 col-form-label">Teacher</label>
                   <div class="col-sm-10">
-                    <select class="form-control" id="provTeacher" name="provTeacher">                     
-      
+                    <select class="form-control" id="provTeacher" name="provTeacher">
+
                     </select>
                   </div>
                 </div>                
@@ -412,6 +441,8 @@
         day_id = $(this).data('day_id');
         abs_id = $(this).data('abs_id');
         prd_id = $(this).data('prd_id');
+
+        
         
         // console.log('prov day:' + day_id);
         // console.log('prov day > absentee:' + abs_id);
@@ -434,6 +465,7 @@
         $('#provTeacher').empty();
         $('#provTeacher').append('<option name="" value="">Select</option>'); 
         for (const teacher of prWiseFreeTeachersObj[prd_no-1]) {
+          
 
           if(! absentTeachers.includes(teacher._id)){             
               // console.log(teacher.name);
@@ -446,6 +478,7 @@
               schTeacher.map( sch => {
                 class_details = class_details + sch.period_no +':' +sch.class.name + sch.section.name +' - ' 
               });
+              // console.log(teacher._id + '-' + teacher.name);
               $('#provTeacher').append('<option value = "'+ teacher._id +'">'+ teacher.name +' [' + class_details +']</option>');
           }
         }
@@ -455,10 +488,15 @@
     $('#provClassAssignForm').submit(function(event){
       event.preventDefault();
       // alert('teacher submitted');
-      console.log('prov day:' + day_id);
+        console.log('prov day:' + day_id);
         console.log('prov day > absentee:' + abs_id);
         console.log('prov day > absentee > off_period:' + prd_id);
         console.log('prov day > absentee > off_period No:' + prd_no);
+        
+        var provAssignTeacher_id = $('#provTeacher').val();
+        console.log('prov Teacher: '+provAssignTeacher_id);
+
+
 
       $.ajax({
           url: "/provisional/ajax/provisional-teacher-submit",
@@ -467,7 +505,12 @@
           // async: false,
           contentType: "application/json",
           data: JSON.stringify({
-              provisional_day_id: day_id, absentee_id: abs_id, period_id: prd_id, period_no: prd_no
+              provisional_day_id: day_id, 
+              absentee_id: abs_id, 
+              period_id: prd_id, 
+              provisional_teacher_id: provAssignTeacher_id,
+              period_no: prd_no
+              
           }),
 
           success: function(msg){

@@ -46,6 +46,7 @@ app.use('/css', express.static(path.resolve(__dirname, "assets/css")));
 app.use('/img', express.static(path.resolve(__dirname, "assets/img")));
 app.use('/js' , express.static(path.resolve(__dirname, "assets/js")));
 app.use('/pdf' , express.static(path.resolve(__dirname, "assets/pdf")));
+app.use('/fonts' , express.static(path.resolve(__dirname, "assets/fonts")));
 
 
 
@@ -261,7 +262,7 @@ app.get('/test', async (req,res) => {
 app.post('/ajax', async (req,res)=>{
     // console.log("ajax submit:"+ JSON.stringify(req.body) );
     // console.log("ajax submit:"+ req.body.subject_id);
-    console.log("ajax submit: "+ req.body.id);
+    // console.log("ajax submit: "+ req.body.id);
 
     const session = await Session.findOne({name: 2022});
     // console.log("Session: "+session);
