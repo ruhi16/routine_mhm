@@ -69,7 +69,8 @@
                         <%  id = d._id %>
                         <strong><%= d.subject.name %></strong><br/>
                         <strong class="small"><%= d.teacher.name %></strong><br>
-                      <%}) %>
+                      <% }) %>
+                      <!-- <%= data.length %> -->
 
                      
                       <button class="btn btn-primary btn-sm btnSave" data-toggle="modal" data-target=".bd-example-modal-lg"
@@ -193,8 +194,17 @@
                 <option name="" value="">Select</option>
               </select>
             </div>
-          </div>          
+          </div>     
           
+          <div class="form-group row">
+            <label for="teacher" class="col-sm-2 col-form-label"></label>
+            <div class="form-check col-sm-10">
+              <input type="checkbox" class="form-check-input" id="parallelClass" value="true">
+              <label class="form-check-label" for="parallelClass">Running Parallel Class</label>
+            </div>
+            
+          </div>
+
       </div>
       <div class="modal-footer">        
         <button class="btn btn-info float-right mr-2" data-dismiss="modal">Cancel</button>
@@ -243,6 +253,7 @@
       var cls_subjsObj = JSON.parse(cls_subjs);
       var schedulesObj = JSON.parse(schedules);
 
+      $('#parallelClass').prop('checked', false); // Unchecks it
       
 
 //==================================================================
@@ -317,9 +328,11 @@
       // console.log(wk_id+"--"+cl_id+"--"+sc_id+"--"+pr_id);
 
       var subj = $('#subject').val();
-      var tech = $('#teacher').val();
+      var tech = $('#teacher').val();      
+      var prcl = $('#parallelClass').is(':checked');
+
       // console.log(subj+tech);
-      // alert(subj+tech);
+      // alert(isChecked);
 
       $.ajax({
         url: "/ajax",
@@ -334,7 +347,8 @@
             section_id: sc_id,
             period_id: pr_id,
             subject_id: subj, 
-            teacher_id: tech
+            teacher_id: tech,
+            parallel_class: prcl
         }),
 
         success: function(msg){

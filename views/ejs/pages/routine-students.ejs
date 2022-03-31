@@ -36,8 +36,8 @@
                 }) %>
                 <% data.map(function(d){%>
                   <%  id = d._id %>
-                  <%= d.subject.name %><br>
-                  <%= d.teacher.shortName %>
+                  <b><%= d.subject.name %></b><br>
+                  <small><%= d.teacher.shortName %></small><br>
                   
                 <%}) %>
               </td>

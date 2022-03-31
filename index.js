@@ -108,7 +108,7 @@ app.get('/routine-provitional', async (req,res)=>{
 
 
 app.get('/day-select/:day', async(req, res)=>{
-    console.log(req.params['day']);
+    // console.log(req.params['day']);
 
     await Weekday.updateMany({}, {status : 'inactive'});
     const day = await Weekday.findOne({
@@ -258,7 +258,7 @@ app.get('/test', async (req,res) => {
 });
 
 app.post('/ajax', async (req,res)=>{
-    // console.log("ajax submit:"+ JSON.stringify(req.body) );
+    console.log("ajax submit schedule req.body:"+ JSON.stringify(req.body) );
     // console.log("ajax submit:"+ req.body.subject_id);
     // console.log("ajax submit: "+ req.body.id);
 
@@ -267,26 +267,49 @@ app.post('/ajax', async (req,res)=>{
 
     
     if(req.body.id != ''){
-        console.log('Not Null');
-
-        const schedule = await Schedule.findOne({
-            _id: req.body.id
-        });
+        // console.log('Not Null');        
         if(req.body.subject_id == '' && req.body.teacher_id == ''){
+            // console.log('Parallel Class: False');
+            const schedule = await Schedule.findOne({
+                _id: req.body.id
+            });
             await schedule.remove();
+            // console.log("removed: "+schedule);
         }else{
-            schedule.weekday = req.body.wkday_id;
-            schedule.class = req.body.class_id;
-            schedule.section = req.body.section_id;
-            schedule.period_no = req.body.period_id;
-            schedule.subject = req.body.subject_id;
-            schedule.teacher = req.body.teacher_id;
-            await schedule.save();
-        }        
+            if(req.body.parallel_class){
+                // console.log('Parallel Class: True');
+                const schedule = new Schedule({
+                    "session": session._id
+                });
+                // console.log("schedule:"+schedule);
+                schedule.weekday = req.body.wkday_id;
+                schedule.class = req.body.class_id;
+                schedule.section = req.body.section_id;
+                schedule.period_no = req.body.period_id;
+                schedule.subject = req.body.subject_id;
+                schedule.teacher = req.body.teacher_id;
+                await schedule.save();
+            }else{
+                // console.log('Parallel Class: False');
+                const schedule = await Schedule.findOne({
+                    _id: req.body.id
+                });
+                // console.log("schedule:"+schedule);
+                schedule.weekday = req.body.wkday_id;
+                schedule.class = req.body.class_id;
+                schedule.section = req.body.section_id;
+                schedule.period_no = req.body.period_id;
+                schedule.subject = req.body.subject_id;
+                schedule.teacher = req.body.teacher_id;
+                await schedule.save();
+            }
+        }
+            
+               
         // console.log("update: "+schedule);
 
     }else{
-        console.log('Null');
+        // console.log('Null');
         const schedule = new Schedule({
             "session": session._id
         });
