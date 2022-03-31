@@ -13,13 +13,13 @@ router.get('/order/class-sections', async(req,res) => {
     // console.log(class_sections);
     // for first time only
 
-    // var i = 1;
-    // class_sections.forEach(async cls_sec => {
-    //     cls_sec.index = i++;
-    //     cls_sec.status = 'active';
-    //     cls_sec.dise_code = '19071515802';
-    //     await cls_sec.save();        
-    // });
+    var i = 1;
+    class_sections.forEach(async cls_sec => {
+        cls_sec.index = i++;
+        cls_sec.status = 'active';
+        cls_sec.dise_code = '19071515802';
+        await cls_sec.save();        
+    });
 
     res.render('ejs/pages/order-class-sections', {
         class_sections
