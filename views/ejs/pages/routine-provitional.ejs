@@ -28,6 +28,51 @@
       <!-- <%= absentee.teacher.name %><br/> -->
     <% }); %>
 
+    <!-- // ============================= // -->
+
+    <% var provisionalAttendTeachers = []; %>
+    <% var n = Number(weekday.periods) %> 
+    <!-- <%= n %> -->
+    <% for (var i =0; i < n;  i++ ) { %>
+      <% var provisionalPeriodWiseAttendTeachers = []; %>
+
+        <% provisionals[0].absentees.forEach(absentee=>{%>
+          
+          <!-- <%= absentee.teacher.name %>: -->
+
+          <% if(absentee.periods ){ %>
+            
+              <% absentee.periods.map(period => { %>
+                <!-- <%= period.period_no %>: -->
+                <!-- <%= period.class.name %><%= period.section.name %> -->
+                
+                <% if(period.period_no == i+1){ %>
+                    <% if(period.teacher ){ %>
+                      <!-- <%= period.teacher.shortName %> -->
+                      <% provisionalPeriodWiseAttendTeachers.push(period.teacher) %>
+                    <% } %>
+                <% } %>
+              
+              <% }); %>
+          <% } %>
+          <!-- <br/> -->
+        <% }); %>
+
+        <% provisionalAttendTeachers.push({
+          period_no: (i+1),
+          assigned_teachers: provisionalPeriodWiseAttendTeachers
+        }); %>
+
+    <% } %>
+
+    <!-- <% provisionalAttendTeachers.forEach( period=>{ %>
+      <% if(period.period_no === 2) {%>
+        <%= JSON.stringify(period) %><br>
+      <% } %>
+    <% }) %> -->
+
+
+
 
 
     <h1>Provitional Routine for <%= today %> <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small></h1>
@@ -36,7 +81,7 @@
     Date: <%= d.getDate() %>,
     Day: <%= today %>,
     <br>
-
+    
     <% teachers.forEach( teacher => {%>
       <!-- <%= teacher.name %>, -->
     <% });%>
@@ -91,9 +136,10 @@
 
         <% provisionals.forEach( provisional => { %>
           <!-- <%= provisional.absentees %> -->
+          <% var proTeacherSlNo = 1 %>
           <% provisional.absentees.map( absentee =>{ %>
             <tr>
-              <td></td>
+              <td class="font-weight-bold"><%= proTeacherSlNo++ %></td>
               <th scope="col">                
                 <%= absentee.teacher.name %><br>
                 <p class="small">
@@ -329,12 +375,12 @@
         </div>
       </div>
 
-      <h1>Absent Teachers List:</h1>
+      <!-- <h1>Absent Teachers List:</h1>
       <% var absentTeachers = []; %>
       <% provisionals[0].absentees.forEach(absentee=>{%>
         <% absentTeachers.push(absentee.teacher); %>
         <%= absentee.teacher.name %><br/>
-      <% }); %>
+      <% }); %> -->
 
 
     <footer>
@@ -364,8 +410,12 @@
     var absentTeachersObj = JSON.parse(absentTeachers);
 
     
+    // var provisionalAttendTeachers = '<%- JSON.stringify(provisionalAttendTeachers) %>';
+    // var provisionalAttendTeachersObj = JSON.parse(provisionalAttendTeachers);
 
-    // console.log(absentTeachersObj);
+    
+
+    // console.log(provisionalAttendTeachersObj);
 
     $('#btnAdd').click(function(){
       
@@ -380,9 +430,9 @@
 
     });
 
-    $('#btnSubmit').click(function(e){
+    // $('#btnSubmit').click(function(e){
 
-    });
+    // });
 
     // $("#provClassAssignForm").on("submit", function(event){
     //   alert('submitted')
@@ -436,51 +486,50 @@
     $('.btnProvAssign').click(function(){
         var prWiseFreeTeachers = '<%- JSON.stringify(periodWiseFreeTeachers) %>';
         var prWiseFreeTeachersObj = JSON.parse(prWiseFreeTeachers);
+
+        var provisionalAttendTeachers = '<%- JSON.stringify(provisionalAttendTeachers) %>';
+        var provisionalAttendTeachersObj = JSON.parse(provisionalAttendTeachers);
         
         prd_no = $(this).data('prd_no');        
         day_id = $(this).data('day_id');
         abs_id = $(this).data('abs_id');
         prd_id = $(this).data('prd_id');
 
-        
-        
-        // console.log('prov day:' + day_id);
-        // console.log('prov day > absentee:' + abs_id);
-        // console.log('prov day > absentee > off_period:' + prd_id);
-        // console.log('prov day > absentee > off_period No:' + prd_no);
-
-        // console.log(prd_no);
-        // console.log(prWiseFreeTeachersObj[prd_no-1]);
-
-        // function compare( a, b ) {
-        //   if ( a.day_id < b.day_id ){
-        //     return -1;
-        //   }
-        //   if ( a.day_id > b.day_id ){
-        //     return 1;
-        //   }
-        //   return 0;
-        // }
+        console.log(prd_no)
+        console.log(provisionalAttendTeachersObj[prd_no-1].assigned_teachers);
+        var provAssignedTeachers = [];
+        if(provisionalAttendTeachersObj[prd_no-1].assigned_teachers){
+          provisionalAttendTeachersObj[prd_no-1].assigned_teachers.forEach(teacher => {
+            provAssignedTeachers.push(teacher._id);
+            console.log(teacher._id);
+          })
+        }
 
         $('#provTeacher').empty();
         $('#provTeacher').append('<option name="" value="">Select</option>'); 
         for (const teacher of prWiseFreeTeachersObj[prd_no-1]) {
           
 
-          if(! absentTeachers.includes(teacher._id)){             
-              // console.log(teacher.name);
-              var schTeacher = schedulesObj.filter( schedule => {
-                return schedule.teacher._id === teacher._id ;              
-              });
-              var class_details = 'Total: '+String(schTeacher.length) + ' => ';
-              // console.log(schTeacher);
-              // console.log(schTeacher.length);
-              schTeacher.map( sch => {
-                class_details = class_details + sch.period_no +':' +sch.class.name + sch.section.name +' - ' 
-              });
-              // console.log(teacher._id + '-' + teacher.name);
-              $('#provTeacher').append('<option value = "'+ teacher._id +'">'+ teacher.name +' [' + class_details +']</option>');
+          if(! absentTeachers.includes(teacher._id)){
+            
+            if(! provAssignedTeachers.includes(teacher._id)){
+
+                // console.log(teacher.name);
+                var schTeacher = schedulesObj.filter( schedule => {
+                  return schedule.teacher._id === teacher._id ;              
+                });
+                var class_details = 'Total: '+String(schTeacher.length) + ' => ';
+                // console.log(schTeacher);
+                // console.log(schTeacher.length);
+                schTeacher.map( sch => {
+                  class_details = class_details + sch.period_no +':' +sch.class.name + sch.section.name +' - ' 
+                });
+                // console.log(teacher._id + '-' + teacher.name);
+                $('#provTeacher').append('<option value = "'+ teacher._id +'">'+ teacher.name +' [' + class_details +']</option>');
+            }
+
           }
+
         }
 
     });
