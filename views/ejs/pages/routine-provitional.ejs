@@ -181,7 +181,11 @@
               <td class="text-right">
                 <button class="btn btn-warning">Arrived</button>
                 
-                <button class="btn btn-danger" >Delete</button>
+                <button class="btn btn-danger btnAbsDelete" id="btnAbsDelete"
+                    data-prv_id = <%= provisionals[0]._id %>
+                    data-abs_id = <%= absentee._id %>
+
+                >Delete</button>
               </td>
             </tr>
             
@@ -412,10 +416,37 @@
     
     // var provisionalAttendTeachers = '<%- JSON.stringify(provisionalAttendTeachers) %>';
     // var provisionalAttendTeachersObj = JSON.parse(provisionalAttendTeachers);
-
-    
-
     // console.log(provisionalAttendTeachersObj);
+
+
+    $('.btnAbsDelete').click(function(){
+        var provisionalId = $(this).data('prv_id');
+        var absenteeId = $(this).data('abs_id');
+        // alert(provisionalId+'/'+absenteeId);
+
+
+        $.ajax({
+          url: "/provisional/ajax/provisional-teacher-delete",
+          method: "post",
+          // dataType: "json",
+          // async: false,
+          contentType: "application/json",
+          data: JSON.stringify({
+              prov_day_id: provisionalId, absentee_id: absenteeId
+          }),
+
+          success: function(msg){
+            console.log("success ajax:" + msg.response );
+            console.log("success ajax:" + JSON.stringify(msg) );
+          },
+          error: function(err){
+            console.log("error:"+err);
+          }
+        });
+
+
+
+    });
 
     $('#btnAdd').click(function(){
       

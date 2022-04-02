@@ -250,6 +250,46 @@ router.post('/ajax/teacher-submit', async (req, res) => {
 
 
 
+router.post('/ajax/provisional-teacher-delete', async(req,res) => {
+    console.log('/ajax/provisional-teacher-delete:'+ JSON.stringify(req.body));
+
+    // const provisional_day_sr = await Provisional.findOne({
+    //     // '_id': req.body.prov_day_id,
+    //     // 'absentees._id': { $eq: req.body.absentee_id },
+    //     absentees: { $elemMatch: {'_id': req.body.absentee_id } }
+    // });
+    // console.log('find absentee:');
+    // console.log(provisional_day_sr);
+
+    const provisional_day = await Provisional.updateOne(
+        {'_id': req.body.prov_day_id},
+        // 'absentees._id': { $eq: req.body.absentee_id },
+        // { '$pull': { 'absentees': { $elemMatch: {'_id': req.body.absentee_id } } } },
+        { $pull: { absentees:  {_id: req.body.absentee_id } } } ,
+        // {$pull: { absentees: { $elemMatch: {'_id': '6247a42843d7d9e3acaca829' } } } },
+        { safe: true }
+    );
+    
+    console.log(provisional_day);
+
+
+    // Dive.update({ _id: diveId }, { "$pull": { "divers": { "diver._id": new ObjectId(userIdToRemove) } } }, { safe: true }, function(err, obj) {
+    //     //do something smart
+    // });
+
+
+
+    res.send({
+        "response":"ajax prov teacher deleted successfully",
+        "message": provisional_day
+    });
+});
+
+
+
+
+
+
 module.exports = {
     router: router
 }
