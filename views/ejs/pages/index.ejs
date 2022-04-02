@@ -26,7 +26,7 @@
     let year = d.getFullYear();
     let today = days[d.getDay()];        
 %>
-
+<h1>Regular Routine, Today: <%= today %>, <%= day %> <%= month %>, <%= year %></h1>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <% weekdays.forEach( weekday => { %>
 
@@ -46,14 +46,19 @@
       <%= weekday.name %>
       <!-- <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small> -->
       <!-- <%= day %> <%= month %>, <%= year %> -->
-      <h1>Regular Routine, Today: <%= today %>, <%= day %> <%= month %>, <%= year %></h1>
+      
       <!-- <%= new Date().getDay();%> -->
 
         
 
         <div class = "row">
           <div class = "col-sm-10">
-            <table class="table table-bordered">    
+            <table class="table table-bordered">
+              <tr>
+                <th colspan="<%= weekday.periods+1%>">
+                  <%= weekday.name %> Routine
+                </th>
+              </tr>    
               <tr>
                 <td><strong>Class</strong></td>
                 <% for(var i=0; i< weekday.periods; i++){ %>
