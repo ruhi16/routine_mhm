@@ -123,7 +123,7 @@ router.get('/routine', async(req,res)=>{
     // console.log('JSON Prov: '+JSON.stringify(provisionals) );
 
 
-    res.render('ejs/pages/routine-provitional',{
+    res.render('ejs/pages/routine-provitional', {
         session, weekday, weekdays, teachers, provisionals, schedules
     });
 });
@@ -278,7 +278,7 @@ router.post('/ajax/provisional-teacher-delete', async(req,res) => {
     // });
 
 
-
+    // res.redirect('/provisional/routine');
     res.send({
         "response":"ajax prov teacher deleted successfully",
         "message": provisional_day

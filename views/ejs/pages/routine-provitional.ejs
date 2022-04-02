@@ -14,11 +14,13 @@
     }) %>
     <% var wkday = selected_day[0].day_id; %>
     <!-- <%= wkday %> -->
-    
-    <%  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    <%  
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const d = new Date();
+        let day = d.getDate();
         let month = months[d.getMonth()];
+        let year = d.getFullYear();
         let today = days[d.getDay()];        
     %>
 
@@ -75,12 +77,12 @@
 
 
 
-    <h1>Provitional Routine for <%= today %> <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small></h1>
-    Session: <%= session.name %>,
+    <h1>Provitional Routine, Today: <%= today %>, <%= day %> <%= month %>, <%= year %></h1></h1>
+    <!-- Session: <%= session.name %>,
     Month: <%= month %>,
     Date: <%= d.getDate() %>,
-    Day: <%= today %>,
-    <br>
+    Day: <%= today %>, 
+    <br> -->
     
     <% teachers.forEach( teacher => {%>
       <!-- <%= teacher.name %>, -->
@@ -246,13 +248,19 @@
       </tbody>
     </table>
     <!-- <%= (periodWiseFreeTeachers[0]) %> -->
-
-      <div class="row">
+<!-- <div class="row">
         <div class="col-md-12 text-right">
             <button type="button" class="btn btn-success">Cancel</button>
             <button type="button" class="btn btn-primary">Submit</button>            
         </div>
-      </div>
+      </div> -->
+
+
+      <% provisionals.forEach( provisional => { %>
+        <%= provisional %>
+      <% }); %>
+
+
 
       
 

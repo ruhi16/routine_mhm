@@ -16,6 +16,17 @@
 
 <% var wkday = selected_day[0].day_id; %>
 
+  
+<%
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const d = new Date();
+    let day = d.getDate();
+    let month = months[d.getMonth()];
+    let year = d.getFullYear();
+    let today = days[d.getDay()];        
+%>
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <% weekdays.forEach( weekday => { %>
 
@@ -33,6 +44,9 @@
     <div class="tab-pane fade <%= weekday.day_id === wkday ? 'show active' : '' %>" 
             id="<%= weekday.name %>" role="tabpanel" aria-labelledby="<%= weekday.name %>-tab">
       <%= weekday.name %>
+      <!-- <small>Date: <%= (new Date()).toLocaleDateString('en-US') %></small> -->
+      <!-- <%= day %> <%= month %>, <%= year %> -->
+      <h1>Regular Routine, Today: <%= today %>, <%= day %> <%= month %>, <%= year %></h1>
       <!-- <%= new Date().getDay();%> -->
 
         

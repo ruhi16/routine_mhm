@@ -227,6 +227,7 @@ app.get('/test', async (req,res) => {
     const cls_subs = await Class_Subject.find({}).populate('subjects').populate('class');
     // console.log("Class-Sections:" + cls_secs );
     // console.log("Class-Subjects: "+ cls_subs );
+    
 
     const weekdays = await Weekday.find({}).sort({ 'day_id': 1});
     const Subjects = await Subject.find({});
