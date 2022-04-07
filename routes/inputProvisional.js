@@ -5,9 +5,80 @@ const {
 
 const router = express.Router();
 
+//====== pdfmake =================
+const pdfMake = require('pdfmake');
+const fs = require('fs');
+const fonts = require('../utils/pdfMakeFonts');
+
+function provisionalRoutinePDF(){
+    let printer = new pdfMake(fonts);
+    var pdfData = {
+        pageOrientation: 'landscape',
+        content: [
+            {
+                text: 'Manikchak High Mardrasah(H.S.)\n',
+                style: 'header',
+                alignment: 'center'
+            },
+            {
+                text: 'Provisional Routine for'+ new Date() ,                    
+                style: 'sub_header',
+                alignment: 'center'
+            },
+            {
+                text: [
+                    'This paragraph uses header style and overrides bold value setting it back to false.\n',
+                    'Header style in this example sets alignment to justify, so this paragraph should be rendered \n',
+                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Malit profecta versatur nomine ocurreret multavit, officiis viveremus aeternum superstitio suspicor alia nostram, quando nostros congressus susceperant concederetur leguntur iam, vigiliae democritea tantopere causae, atilii plerumque ipsas potitur pertineant multis rem quaeri pro, legendum didicisse credere ex maluisset per videtis. Cur discordans praetereat aliae ruinae dirigentur orestem eodem, praetermittenda divinum. Collegisti, deteriora malint loquuntur officii cotidie finitas referri doleamus ambigua acute. Adhaesiones ratione beate arbitraretur detractis perdiscere, constituant hostis polyaeno. Diu concederetur.'
+                    ],
+                style: 'text',
+                bold: false
+            }
+        ],
+        styles: {
+            header: {
+                fontSize: 22,
+                bold: true,
+                alignment: 'justify'
+            },
+            sub_header: {
+                fontSize: 16,
+                bold: true,
+                alignment: 'justify'
+            },
+            text: {
+                fontSize: 12,
+                bold: true,
+                alignment: 'justify'
+            }
+        }
+        
+    }
+    let pdfDoc = printer.createPdfKitDocument(pdfData);
+    pdfDoc.pipe(fs.createWriteStream('assets/pdf/provisional-routine.pdf'));
+    pdfDoc.end();
+
+}
+//==============================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // /provisional/
 router.get('/routine', async(req,res)=>{
     const session = await Session.findOne({status: "active"});
+    provisionalRoutinePDF();
     // console.log(session);
 
     // process.env.TZ = 'Asia/Calcutta';

@@ -140,6 +140,7 @@ const Teacher = mongoose.model('Teacher', teacherSchema);
 const scheduleSchema = new mongoose.Schema({
     session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
     weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
+    
     class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
     section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
     period_no: {type: Number, required: true},
@@ -173,10 +174,46 @@ const provisionalSchema = new mongoose.Schema({
             period_no : {type: Number },
             teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
         }]
-    }]
+    }],
+    status: {type:String},
+    index: {type: Number},
+    dise_code: {type:String},
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
 });
 const Provisional = mongoose.model('Provisional', provisionalSchema);
 
+const currentDayScheduleSchema = new mongoose.Schema({
+    session: {type: mongoose.Schema.Types.ObjectId, ref: 'Session'},
+    curr_date: { type: Date },
+    weekday: {type: mongoose.Schema.Types.ObjectId, ref: 'Weekday'},
+    who_auth: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
+    no_of_periods: {type: Number },
+    details: {
+        prsn_teachers: [{
+            class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
+            section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
+            subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
+            period_no : {type: Number },
+            period_status: {type: String},
+            teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
+        }],
+        absn_teachers: [{
+            teacher:  {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
+            reason: {type: String },
+            off_periods: [{type: Number}],
+            status: {type: String },
+        }]
+    },
+
+    status: {type:String},
+    index: {type: Number},
+    dise_code: {type:String},
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+});
+
+const CurrentDaySchedule = mongoose.model('CurrentDaySchedule', currentDayScheduleSchema);
 
 
 
