@@ -10,7 +10,80 @@ const pdfMake = require('pdfmake');
 const fs = require('fs');
 const fonts = require('../utils/pdfMakeFonts');
 
-function provisionalRoutinePDF(){
+function provisionalRoutinePDF({weekday, provisionals}={}){
+    console.log('=====');
+
+    var n = weekday.periods;
+    
+    var pageHeader = [];
+    pageHeader.push('Name');
+    for(var i=0; i<n; i++){
+        // pageHeader.push( {'text':i+2} );
+        pageHeader.push( i+1 );
+    }
+
+
+    var provisionalAttendTeachers = [];
+        
+    provisionals.forEach(provisional => {
+        var eachProvisionalTeacher = [];
+
+        provisional.absentees.map(absentee => {
+            eachProvisionalTeacher = [];
+            eachProvisionalTeacher.push(absentee.teacher.name);
+            
+            for(var i=0; i<n; i++){
+                var flag = false;
+                absentee.periods.forEach( period => {
+                    if( period.period_no === i+1){
+                        eachProvisionalTeacher.push( (i+1) + ': ' +  period.class.name 
+                            + period.section.name + '-' + period.subject.name);                            
+                            flag = true;
+                    }
+                });
+                if(flag === false){
+                    eachProvisionalTeacher.push((i+1) + ': ' + 'na');
+                }
+            }
+
+            provisionalAttendTeachers.push(eachProvisionalTeacher);
+        });
+        
+    
+    });
+
+    // console.log(provisionals.length);
+    // console.log(provisionalAttendTeachers.length);
+    // provisionalAttendTeachers.map(item => {
+    //     console.log(item);
+    //     console.log('----');
+    // })
+
+
+    var tableHeading = pageHeader.map(item =>{ 
+        return { text: item, alignment: 'center' } 
+    });
+
+    var tableDataMain = [];
+    var tableData = pageHeader.map((item,index) =>{         
+        return { text:
+            index +
+            provisionalAttendTeachers.map(it => {
+                return it+'bb'
+            })     
+        }
+    });
+
+    tableDataMain.push(tableData)
+
+
+
+
+
+
+
+    
+
     let printer = new pdfMake(fonts);
     var pdfData = {
         pageOrientation: 'landscape',
@@ -21,19 +94,28 @@ function provisionalRoutinePDF(){
                 alignment: 'center'
             },
             {
-                text: 'Provisional Routine for'+ new Date() ,                    
+                text: 'Provisional Routine for: '+ new Date() ,                    
                 style: 'sub_header',
                 alignment: 'center'
             },
+
             {
-                text: [
-                    'This paragraph uses header style and overrides bold value setting it back to false.\n',
-                    'Header style in this example sets alignment to justify, so this paragraph should be rendered \n',
-                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Malit profecta versatur nomine ocurreret multavit, officiis viveremus aeternum superstitio suspicor alia nostram, quando nostros congressus susceperant concederetur leguntur iam, vigiliae democritea tantopere causae, atilii plerumque ipsas potitur pertineant multis rem quaeri pro, legendum didicisse credere ex maluisset per videtis. Cur discordans praetereat aliae ruinae dirigentur orestem eodem, praetermittenda divinum. Collegisti, deteriora malint loquuntur officii cotidie finitas referri doleamus ambigua acute. Adhaesiones ratione beate arbitraretur detractis perdiscere, constituant hostis polyaeno. Diu concederetur.'
-                    ],
-                style: 'text',
-                bold: false
-            }
+                table:{
+                    widths: pageHeader.map(item =>{ 
+                        return { text: item } 
+                    }),
+                    body:[
+                        tableHeading,
+                        tableData
+                    ]
+                }
+            },
+            // {
+                
+            //     text: provisionalAttendTeachers,
+            //     style: 'text',
+            //     bold: false
+            // }
         ],
         styles: {
             header: {
@@ -78,7 +160,7 @@ function provisionalRoutinePDF(){
 // /provisional/
 router.get('/routine', async(req,res)=>{
     const session = await Session.findOne({status: "active"});
-    provisionalRoutinePDF();
+    // provisionalRoutinePDF();
     // console.log(session);
 
     // process.env.TZ = 'Asia/Calcutta';
@@ -193,7 +275,7 @@ router.get('/routine', async(req,res)=>{
     ;
     // console.log('JSON Prov: '+JSON.stringify(provisionals) );
 
-
+    provisionalRoutinePDF( {weekday, provisionals} );
     res.render('ejs/pages/routine-provitional', {
         session, weekday, weekdays, teachers, provisionals, schedules
     });
