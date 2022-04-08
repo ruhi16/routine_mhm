@@ -10,79 +10,85 @@ const pdfMake = require('pdfmake');
 const fs = require('fs');
 const fonts = require('../utils/pdfMakeFonts');
 
-function provisionalRoutinePDF({weekday, provisionals}={}){
-    console.log('=====');
 
-    var n = weekday.periods;
-    
+
+// ==============================
+
+function buildTableProvisionals(weekday, provisionals) {
+    var widths = [];
+    widths.push('*');
+    for(var i = 1; i <= weekday.periods; i++){
+        widths.push('*');
+    }
+    return {
+        table: {
+            widths: widths,
+            headerRows: 1,
+            body: buildTableBody(weekday, provisionals)
+        }
+    }
+}
+
+
+function buildTableBody(weekday, provisionals){
+    var body = [];
+
+    var n = weekday.periods;    
     var pageHeader = [];
+
     pageHeader.push('Name');
-    for(var i=0; i<n; i++){
-        // pageHeader.push( {'text':i+2} );
-        pageHeader.push( i+1 );
+    
+    for(var i = 1; i <= n; i++){        
+        pageHeader.push( {text: i, alignment: 'center' });
     }
 
-
-    var provisionalAttendTeachers = [];
+    body.push(pageHeader);
+    //==================================================
+    provisionals.forEach( provisional =>{
+        var dataRow = [];
         
-    provisionals.forEach(provisional => {
-        var eachProvisionalTeacher = [];
-
-        provisional.absentees.map(absentee => {
-            eachProvisionalTeacher = [];
-            eachProvisionalTeacher.push(absentee.teacher.name);
+        provisional.absentees.map( absentee => {
+            dataRow = [];
+            // console.log(absentee.teacher.name);
+            var name = {text: absentee.teacher.name, fontSize: 15, bold: true};
             
-            for(var i=0; i<n; i++){
+            dataRow.push(name);
+
+            for(var i=1; i<=n; i++){
                 var flag = false;
-                absentee.periods.forEach( period => {
-                    if( period.period_no === i+1){
-                        eachProvisionalTeacher.push( (i+1) + ': ' +  period.class.name 
-                            + period.section.name + '-' + period.subject.name);                            
-                            flag = true;
+                absentee.periods.forEach(period => {
+                    if( period.period_no === i ){
+                        var str = period.class.name + period.section.name + '-' + period.subject.name + '\n';
+                        str = str + 'To: ' +(period.teacher ? period.teacher.name : '') 
+
+                        dataRow.push(str);
+                        flag = true;
                     }
-                });
+                })
+
                 if(flag === false){
-                    eachProvisionalTeacher.push((i+1) + ': ' + 'na');
+                    dataRow.push(' ');
                 }
             }
 
-            provisionalAttendTeachers.push(eachProvisionalTeacher);
+            body.push(dataRow);    
         });
         
-    
-    });
+        
 
-    // console.log(provisionals.length);
-    // console.log(provisionalAttendTeachers.length);
-    // provisionalAttendTeachers.map(item => {
-    //     console.log(item);
-    //     console.log('----');
-    // })
+    })
 
 
-    var tableHeading = pageHeader.map(item =>{ 
-        return { text: item, alignment: 'center' } 
-    });
 
-    var tableDataMain = [];
-    var tableData = pageHeader.map((item,index) =>{         
-        return { text:
-            index +
-            provisionalAttendTeachers.map(it => {
-                return it+'bb'
-            })     
-        }
-    });
+    return body;
+}
 
-    tableDataMain.push(tableData)
+
+function provisionalRoutinePDF({weekday, provisionals} = {}){
 
 
 
 
-
-
-
-    
 
     let printer = new pdfMake(fonts);
     var pdfData = {
@@ -94,28 +100,26 @@ function provisionalRoutinePDF({weekday, provisionals}={}){
                 alignment: 'center'
             },
             {
-                text: 'Provisional Routine for: '+ new Date() ,                    
+                text: 'Provisional Routine for: '+ new Date() +'\n\n',                    
                 style: 'sub_header',
                 alignment: 'center'
             },
 
-            {
-                table:{
-                    widths: pageHeader.map(item =>{ 
-                        return { text: item } 
-                    }),
-                    body:[
-                        tableHeading,
-                        tableData
-                    ]
-                }
-            },
+            buildTableProvisionals(weekday, provisionals),
+
             // {
-                
-            //     text: provisionalAttendTeachers,
-            //     style: 'text',
-            //     bold: false
-            // }
+            //     table:{
+            //         widths: pageHeader.map(item =>{ 
+            //             return { text: item } 
+            //         }),
+            //         body:[
+            //             tableHeading,
+            //             tableData
+            //         ]
+            //     }
+            // },
+            
+
         ],
         styles: {
             header: {
@@ -141,7 +145,7 @@ function provisionalRoutinePDF({weekday, provisionals}={}){
     pdfDoc.end();
 
 }
-//==============================
+// ==============================
 
 
 
@@ -276,6 +280,7 @@ router.get('/routine', async(req,res)=>{
     // console.log('JSON Prov: '+JSON.stringify(provisionals) );
 
     provisionalRoutinePDF( {weekday, provisionals} );
+
     res.render('ejs/pages/routine-provitional', {
         session, weekday, weekdays, teachers, provisionals, schedules
     });

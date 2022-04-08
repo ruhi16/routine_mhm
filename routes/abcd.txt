@@ -1,0 +1,132 @@
+var externalDataRetrievedFromServer = [
+    { name: 'Bartek', age: 34 },
+    { name: 'John', age: 27 },
+    { name: 'Elizabeth', age: 30 },
+];
+
+function buildTableBody(data, columns) {
+    var body = [];
+
+    body.push(columns);
+
+    data.forEach(function(row) {
+        var dataRow = [];
+
+        columns.forEach(function(column) {
+            dataRow.push(row[column].toString());
+        })
+
+        body.push(dataRow);
+    });
+
+    return body;
+}
+
+function table(data, columns) {
+    return {
+        table: {
+            headerRows: 1,
+            body: buildTableBody(data, columns)
+        }
+    };
+}
+
+var dd = {
+    content: [
+        { text: 'Dynamic parts', style: 'header' },
+        table(externalDataRetrievedFromServer, ['name', 'age'])
+    ]
+}
+
+===================================
+function buildTableBody(){
+    var n = weekday.periods;
+
+    var pageHeader = [];
+    pageHeader.push('Name');
+    for(var i=0; i<n; i++){
+        // pageHeader.push( {'text':i+2} );
+        pageHeader.push( i+1 );
+    }
+
+    var body = [];
+    body.push(pageHeader);    // heading
+    body.push();    // body
+    return body;
+
+}
+
+
+
+function buildTableProvisionals(){
+    return {
+        table: {
+            headerRows: 1,
+            body: buildTableBody()
+        }
+    }
+}
+
+===================================================
+// console.log('=====');
+
+var n = weekday.periods;
+    
+// var pageHeader = [];
+// pageHeader.push('Name');
+// for(var i=0; i<n; i++){
+//     // pageHeader.push( {'text':i+2} );
+//     pageHeader.push( i+1 );
+// }
+
+
+var provisionalAttendTeachers = [];
+    
+provisionals.forEach(provisional => {
+    var eachProvisionalTeacher = [];
+
+    provisional.absentees.map(absentee => {
+        eachProvisionalTeacher = [];
+        eachProvisionalTeacher.push(absentee.teacher.name);
+        
+        for(var i=0; i<n; i++){
+            var flag = false;
+            absentee.periods.forEach( period => {
+                if( period.period_no === i+1){
+                    eachProvisionalTeacher.push( (i+1) + ': ' +  period.class.name 
+                        + period.section.name + '-' + period.subject.name);                            
+                        flag = true;
+                }
+            });
+            if(flag === false){
+                eachProvisionalTeacher.push((i+1) + ': ' + 'na');
+            }
+        }
+
+        provisionalAttendTeachers.push(eachProvisionalTeacher);
+    });
+    
+
+});
+
+var tableHeading = pageHeader.map(item =>{ 
+    return { text: item, alignment: 'center' } 
+});
+
+var tableDataMain = [];
+var tableData = pageHeader.map((item,index) =>{         
+    return { text:
+        index +
+        provisionalAttendTeachers.map(it => {
+            return it+'bb'
+        })     
+    }
+});
+
+tableDataMain.push(tableData)
+
+
+
+
+
+
