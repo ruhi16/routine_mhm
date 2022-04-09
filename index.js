@@ -67,7 +67,8 @@ const inputProvisional = require('./routes/inputProvisional');
 const htmlToPdfmake = require('html-to-pdfmake');
 app.use('/provisional/', inputProvisional.router);
 
-
+const routineTeachers = require('./routes/routineTeachers');
+app.use('/routine-teachers/', routineTeachers.router);
 
 
 
@@ -127,61 +128,61 @@ app.get('/day-select/:day', async(req, res)=>{
 
 
 
-// ==============================================================
-function htmlToPdfmakeDoc(){
-    var pdfMake = require("pdfmake/build/pdfmake");
-    var pdfFonts = require("pdfmake/build/vfs_fonts");
-    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-    var htmlToPdfmake = require("html-to-pdfmake");
+// // ==============================================================
+// function htmlToPdfmakeDoc(){
+//     var pdfMake = require("pdfmake/build/pdfmake");
+//     var pdfFonts = require("pdfmake/build/vfs_fonts");
+//     pdfMake.vfs = pdfFonts.pdfMake.vfs;
+//     var htmlToPdfmake = require("html-to-pdfmake");
 
     
     
-    var fs = require('fs');
-    var jsdom = require("jsdom");
-    var { JSDOM } = jsdom;
-    var { window } = new JSDOM("");
+//     var fs = require('fs');
+//     var jsdom = require("jsdom");
+//     var { JSDOM } = jsdom;
+//     var { window } = new JSDOM("");
 
-    var html = htmlToPdfmake(`
-    <p>
-        This sentence has <strong>a highlighted word</strong>, but not only.
-    </p>
-    `, {window:window});
+//     var html = htmlToPdfmake(`
+//     <p>
+//         This sentence has <strong>a highlighted word</strong>, but not only.
+//     </p>
+//     `, {window:window});
 
-    var dd = {
-        content: [html],
+//     var dd = {
+//         content: [html],
         
-      }
-    //   pdfMake.createPdf(dd).download();
+//       }
+//     //   pdfMake.createPdf(dd).download();
     
-    var pdfDocGenerator = pdfMake.createPdf(dd);
-    pdfDocGenerator.getBuffer(function(buffer) {
-      fs.writeFileSync('example.pdf', buffer);
-    }); 
-}
-// ==============================================================
+//     var pdfDocGenerator = pdfMake.createPdf(dd);
+//     pdfDocGenerator.getBuffer(function(buffer) {
+//       fs.writeFileSync('example.pdf', buffer);
+//     }); 
+// }
+// // ==============================================================
 
-app.get('/routine-teachers', async (req,res) => {
-    const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
-    const Teachers = await Teacher.find({}).sort({'index' : 1});
+// app.get('/routine-teachers', async (req,res) => {
+//     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
+//     const Teachers = await Teacher.find({}).sort({'index' : 1});
 
-    const Schedules = await Schedule.find({})
-    .populate('session')
-    .populate('weekday')
-    .populate('class')
-    .populate('section')
-    .populate('subject')
-    .populate('teacher')
-    ;
+//     const Schedules = await Schedule.find({})
+//     .populate('session')
+//     .populate('weekday')
+//     .populate('class')
+//     .populate('section')
+//     .populate('subject')
+//     .populate('teacher')
+//     ;
 
-    // htmlToPdfmakeDoc();
+//     // htmlToPdfmakeDoc();
 
 
-    res.render('ejs/pages/routine-teachers',{
-        Weekdays,
-        Teachers,
-        Schedules        
-    });    
-});
+//     res.render('ejs/pages/routine-teachers',{
+//         Weekdays,
+//         Teachers,
+//         Schedules        
+//     });    
+// });
 
 app.get('/routine-teachers-pdf', async (req,res) => {
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});

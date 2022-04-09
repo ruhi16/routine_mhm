@@ -5,11 +5,11 @@ const {
 
 const router = express.Router();
 
-//====== pdfmake =================
+//====== pdfmake setting starts =================
 const pdfMake = require('pdfmake');
 const fs = require('fs');
 const fonts = require('../utils/pdfMakeFonts');
-
+//====== pdfmake setting ends ===================
 
 
 // ==============================
@@ -93,10 +93,6 @@ function buildTableBody(weekday, provisionals){
 
 function provisionalRoutinePDF({weekday, provisionals} = {}){
 
-
-
-
-
     let printer = new pdfMake(fonts);
     var pdfData = {
         pageOrientation: 'landscape',
@@ -113,19 +109,6 @@ function provisionalRoutinePDF({weekday, provisionals} = {}){
             },
 
             buildTableProvisionals(weekday, provisionals),
-
-            // {
-            //     table:{
-            //         widths: pageHeader.map(item =>{ 
-            //             return { text: item } 
-            //         }),
-            //         body:[
-            //             tableHeading,
-            //             tableData
-            //         ]
-            //     }
-            // },
-            
 
         ],
         styles: {
