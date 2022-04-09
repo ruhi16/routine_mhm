@@ -17,9 +17,10 @@ function buildTeachersRoutineTABLE(Weekdays, Teachers, Schedules) {
 
     Weekdays.forEach( weekday => {
         var widths = [];
-        widths.push('*');
+        widths.push(12);
+        widths.push(50);
         for(var i = 1; i <= weekday.periods; i++){
-            widths.push('*');
+            widths.push(46);
         }
 
 
@@ -34,6 +35,7 @@ function buildTeachersRoutineTABLE(Weekdays, Teachers, Schedules) {
         
         }
 
+        everything.push({text: weekday.name, alignment:'center'});
         everything.push(obj);
     })
     
@@ -48,7 +50,9 @@ function buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules){
     var n = weekday.periods;    
     var pageHeader = [];
 
+    pageHeader.push('Sl');
     pageHeader.push('Name');
+    
     
     for(var i = 1; i <= weekday.periods; i++){        
         pageHeader.push( {text: i, alignment: 'center' });
@@ -58,8 +62,10 @@ function buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules){
 
     //==================================================
     // for each teacher
-    Teachers.forEach(teacher => {
+    Teachers.forEach( (teacher,index) => {
         var dataRow = [];
+
+        dataRow.push({text: (index+1), fontSize: 8, alignment: 'right'});
         dataRow.push({text: teacher.name, fontSize: 8});
         //for each period
         for(var i = 0; i < weekday.periods; i++){
