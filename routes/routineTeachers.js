@@ -25,16 +25,11 @@ function buildTeachersRoutineTABLE(Weekdays, Teachers, Schedules) {
 
         var obj = { 
             pageBreak: 'after',
-            weekday: weekday.name,
+            text: weekday.name,
             table: {
                 widths: widths,
                 headerRows: 1,
-                body: 
-                // [
-                //     ['Heading'],
-                //     ['This is contents']
-                // ]
-                buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules)    
+                body: buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules)    
             }
         
         }
