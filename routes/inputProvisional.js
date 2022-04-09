@@ -50,9 +50,16 @@ function buildTableBody(weekday, provisionals){
         provisional.absentees.map( absentee => {
             dataRow = [];
             // console.log(absentee.teacher.name);
+            var nameRow = [];
             var name = {text: absentee.teacher.name, fontSize: 15, bold: true};
-            
-            dataRow.push(name);
+            nameRow.push(name);
+
+            var reason = {text: absentee.reason, fontSize: 12, bold: false};
+            nameRow.push(reason);
+
+
+            dataRow.push(nameRow);
+            // dataRow.push(name);
 
             for(var i=1; i<=n; i++){
                 var flag = false;

@@ -64,6 +64,7 @@ const inputTeachers = require('./routes/inputTeachers');
 app.use('/teachers/', inputTeachers.router);
 
 const inputProvisional = require('./routes/inputProvisional');
+const htmlToPdfmake = require('html-to-pdfmake');
 app.use('/provisional/', inputProvisional.router);
 
 
@@ -126,9 +127,38 @@ app.get('/day-select/:day', async(req, res)=>{
 
 
 
+// ==============================================================
+function htmlToPdfmakeDoc(){
+    var pdfMake = require("pdfmake/build/pdfmake");
+    var pdfFonts = require("pdfmake/build/vfs_fonts");
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    var htmlToPdfmake = require("html-to-pdfmake");
 
+    
+    
+    var fs = require('fs');
+    var jsdom = require("jsdom");
+    var { JSDOM } = jsdom;
+    var { window } = new JSDOM("");
 
+    var html = htmlToPdfmake(`
+    <p>
+        This sentence has <strong>a highlighted word</strong>, but not only.
+    </p>
+    `, {window:window});
 
+    var dd = {
+        content: [html],
+        
+      }
+    //   pdfMake.createPdf(dd).download();
+    
+    var pdfDocGenerator = pdfMake.createPdf(dd);
+    pdfDocGenerator.getBuffer(function(buffer) {
+      fs.writeFileSync('example.pdf', buffer);
+    }); 
+}
+// ==============================================================
 
 app.get('/routine-teachers', async (req,res) => {
     const Weekdays = await Weekday.find({}).sort({ 'day_id': 1});
@@ -142,6 +172,9 @@ app.get('/routine-teachers', async (req,res) => {
     .populate('subject')
     .populate('teacher')
     ;
+
+    // htmlToPdfmakeDoc();
+
 
     res.render('ejs/pages/routine-teachers',{
         Weekdays,

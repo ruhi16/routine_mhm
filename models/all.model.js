@@ -190,20 +190,22 @@ const currentDayScheduleSchema = new mongoose.Schema({
     who_auth: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
     no_of_periods: {type: Number },
     details: {
-        prsn_teachers: [{
-            class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
-            section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
-            subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
-            period_no : {type: Number },
-            period_status: {type: String},
-            teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
-        }],
-        absn_teachers: [{
-            teacher:  {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
-            reason: {type: String },
-            off_periods: [{type: Number}],
-            status: {type: String },
-        }]
+        present_teachers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Schedule'}],
+        absent_teachers: {type: mongoose.Schema.Types.ObjectId, ref: 'Provisional'},
+        // present_teachers: [{
+        //     class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
+        //     section: {type: mongoose.Schema.Types.ObjectId, ref: 'Section'},
+        //     subject: {type: mongoose.Schema.Types.ObjectId, ref: 'Subject'},
+        //     period_no : {type: Number },
+        //     period_status: {type: String},
+        //     teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'}
+        // }],
+        // absent_teachers: [{
+        //     teacher:  {type: mongoose.Schema.Types.ObjectId, ref: 'Teacher'},
+        //     reason: {type: String },
+        //     off_periods: [{type: Number}],
+        //     status: {type: String },
+        // }]
     },
 
     status: {type:String},
