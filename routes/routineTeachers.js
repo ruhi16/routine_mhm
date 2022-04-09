@@ -17,10 +17,10 @@ function buildTeachersRoutineTABLE(Weekdays, Teachers, Schedules) {
 
     Weekdays.forEach( weekday => {
         var widths = [];
-        widths.push(12);
+        widths.push(10);
         widths.push(50);
         for(var i = 1; i <= weekday.periods; i++){
-            widths.push(46);
+            widths.push(48);
         }
 
 
@@ -50,7 +50,7 @@ function buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules){
     var n = weekday.periods;    
     var pageHeader = [];
 
-    pageHeader.push('Sl');
+    pageHeader.push({text: 'Sl', fontSize: 10});
     pageHeader.push('Name');
     
     
