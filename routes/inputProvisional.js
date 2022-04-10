@@ -51,10 +51,10 @@ function buildTableBody(weekday, provisionals){
             dataRow = [];
             // console.log(absentee.teacher.name);
             var nameRow = [];
-            var name = {text: absentee.teacher.name, fontSize: 15, bold: true};
+            var name = {text: absentee.teacher.name, fontSize: 12, bold: true};
             nameRow.push(name);
 
-            var reason = {text: absentee.reason, fontSize: 12, bold: false};
+            var reason = {text: absentee.reason, fontSize: 10, bold: false};
             nameRow.push(reason);
 
 
@@ -65,10 +65,10 @@ function buildTableBody(weekday, provisionals){
                 var flag = false;
                 absentee.periods.forEach(period => {
                     if( period.period_no === i ){
-                        var str = period.class.name + period.section.name + '-' + period.subject.name + '\n';
+                        var str = period.class.name + period.section.name + '-' + period.subject.shortName + '\n';
                         str = str + 'To: ' +(period.teacher ? period.teacher.name : '') 
 
-                        dataRow.push(str);
+                        dataRow.push({text: str, fontSize: 10});
                         flag = true;
                     }
                 })
