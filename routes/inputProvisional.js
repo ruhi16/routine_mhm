@@ -276,13 +276,137 @@ router.get('/routine', async(req,res)=>{
     });
 });
 
+
+router.get('/routine/previous', async(req,res) => {
+    const session = await Session.findOne({status: "active"});
+    
+
+    // const curr_date = new Date();    
+    // const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    // const today = days[curr_date.getDay()];
+    
+    // const curr_date_split = curr_date.toISOString().split('T')[0];    
+    // curr_date_split_dt = new Date(curr_date_split);
+
+    // console.log(curr_date_split_dt);
+
+    // const weekday = await Weekday.findOne({
+    //     name: today
+    // });
+
+    const weekdays = await Weekday.find({}).sort({'day_id':1});
+    // console.log('weekday:'+weekday);
+    // const schedules = await Schedule.find({
+    //     session: session,
+    //     weekday: weekday
+    // }).sort({ period_no : 1 })
+    // .populate('session')
+    // .populate('weekday')
+    // .populate('class')
+    // .populate('section')
+    // .populate('subject')
+    // .populate('teacher')
+    // ;
+    // console.log('schedule:'+schedules)
+
+
+    
+
+    
+    
+    // const provistional = await Provisional.find({
+    //     // curr_date: curr_date_split_dt.toISOString()
+    // });
+
+    // if(provistional){
+    //     console.log('exists');
+    //     // console.log('provisional:'+provistional);
+    // }else{
+    //     console.log('not exists');
+    //     const prov = new Provisional({
+    //         session: session,
+    //         curr_date: curr_date_split_dt.toISOString()
+    //     });
+    //     await prov.save();
+    //     // console.log(prov);
+    // }
+
+    // const date = new Date();
+    // const [withoutTime] = date.toISOString().split('T');
+    // console.log(withoutTime); // 👉️ 2022-01-18
+    // console.log( (new Date(withoutTime)).toISOString() ); // 👉️ 2022-01-18
+
+    
+    const teachers = await Teacher.find({});
+    const provisionals = await Provisional.find({
+        // curr_date: (new Date(curr_date_split)).toISOString()
+    }).sort({'curr_date': -1})
+    .populate('session')
+    .populate({        
+        path: 'absentees',
+        populate: {
+            path: 'teacher',
+            model: 'Teacher',
+        }    
+    })
+    .populate({        
+        path: 'absentees',
+        populate: {
+            path: 'periods',
+            populate: {
+                path: 'class',
+                model: 'Class'
+            }            
+        }, 
+    })
+    .populate({        
+        path: 'absentees.periods.section',
+        model: 'Section'        
+    })
+    .populate({        
+        path: 'absentees.periods.teacher',
+        model: 'Teacher'
+    })
+    .populate({        
+        path: 'absentees',
+        populate: {
+            path: 'periods',
+            populate: {
+                path: 'subject',
+                model: 'Subject'
+            }            
+        }, 
+    })
+    ;
+
+
+
+
+    res.render('ejs/pages/routine-provitional-previous',{
+        session, weekdays, provisionals
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.post('/ajax/provisional-teacher-submit', async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
 
     const prov_assigned_teacher = await Teacher.findOne({ 
         '_id': req.body.provisional_teacher_id
     });
-    console.log(prov_assigned_teacher);
+    // console.log(prov_assigned_teacher);
 
     const prov_class = await Provisional.findOne({
         '_id': req.body.provisional_day_id,
@@ -399,7 +523,7 @@ router.post('/ajax/teacher-submit', async (req, res) => {
 
 
 router.post('/ajax/provisional-teacher-delete', async(req,res) => {
-    console.log('/ajax/provisional-teacher-delete:'+ JSON.stringify(req.body));
+    // console.log('/ajax/provisional-teacher-delete:'+ JSON.stringify(req.body));
 
     // const provisional_day_sr = await Provisional.findOne({
     //     // '_id': req.body.prov_day_id,
@@ -418,7 +542,7 @@ router.post('/ajax/provisional-teacher-delete', async(req,res) => {
         { safe: true }
     );
     
-    console.log(provisional_day);
+    // console.log(provisional_day);
 
 
     // Dive.update({ _id: diveId }, { "$pull": { "divers": { "diver._id": new ObjectId(userIdToRemove) } } }, { safe: true }, function(err, obj) {

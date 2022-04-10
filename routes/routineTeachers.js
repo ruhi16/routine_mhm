@@ -66,7 +66,7 @@ function buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules){
         var dataRow = [];
 
         dataRow.push({text: (index+1), fontSize: 8, alignment: 'right'});
-        dataRow.push({text: teacher.name, fontSize: 8});
+        dataRow.push({text: teacher.shortName, fontSize: 8});
         //for each period
         for(var i = 0; i < weekday.periods; i++){
             // set of schedules
@@ -81,7 +81,8 @@ function buildTeachersRoutineTABLE_BODY(weekday, Teachers, Schedules){
             var str = '';
             if(data !== null){
                 data.forEach( d => { 
-                    str = str + d.class.name + d.section.name  +'\n'+ d.subject.name
+                    str = str + d.class.name + d.section.name  +'-'+ d.subject.shortName
+
                 })
             }
             // console.log(str);

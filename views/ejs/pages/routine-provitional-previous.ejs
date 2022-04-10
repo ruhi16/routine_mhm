@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  
+  <body class="container">
+
+    <header>
+      <%- include('../partials/header'); %>
+    </header>
+    <% 
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; 
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    %>
+    <h1>Provisional Routine for Previou Days</h1>
+
+
+    <table class="table table-bordered">
+      <head>
+        <tr>
+          <th>SL</td>
+          <th>Date</th>
+          <th>Name</th>
+        </tr>  
+      </head>
+    <% provisionals.forEach( (provisional, index) => { %>
+      <tr>
+        <td>
+          <%= index+1 %>
+        </td>
+        <td>
+          <!-- <%= provisional.curr_date %> -->          
+          <%= provisional.curr_date.getDate() %>
+          <%= months[provisional.curr_date.getMonth()] %>
+          <%= provisional.curr_date.getFullYear() %><br/>
+          <%= days[provisional.curr_date.getDay()] %>
+          <!-- <%= days[provisional.curr_date.getDay()] %> -->
+          <% wkday = weekdays.filter( wkday => { return wkday.name === (days[provisional.curr_date.getDay()]) }) %>
+          <!-- <% wkday[0].periods %> -->
+        </td>
+        <td> 
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <% for(var i = 1; i <= wkday[0].periods; i++){ %>
+                  <th><%= i%></th>
+                <%}%>
+              </tr>
+            </thead>
+            <tbody>                          
+                
+                  <% provisional.absentees.forEach( (absentee, index) => { %>
+                    <tr>
+                      <td><%= index+1 %></td> 
+                    <td>
+                      <%= absentee.teacher.name %>
+                    </td>
+                    <% for(var i = 1; i <= wkday[0].periods; i++){ %>
+                      <td>
+                        <% absentee.periods.forEach( period => {%>
+
+                          
+                          <% if(period.period_no === i){ %>
+                            <%= period.class.name%><%= period.section.name%>-<%= period.subject.shortName %><br/> 
+                            <small><b><%= period.teacher? period.teacher.name : '' %></b></small>
+                            
+                          <% }  %>
+                          
+                        
+                        <% })%>      
+                      </td>
+                  <%}%>     
+                </tr>
+                <% }) %>
+              
+            </tbody>
+          </table>         
+          
+        </td>
+        
+      </tr>
+    <% }); %>
+
+  </table>
+
+
+    <footer>
+      <%- include('../partials/footer'); %>
+    </footer>
+
+
+
+
+  </body>
+</html>
+
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript" >
+  $(document).ready(function(e){
+
+
+  });
+</script>

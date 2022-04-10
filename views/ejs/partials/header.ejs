@@ -4,8 +4,13 @@
       <li class="nav-item">
         <a class="nav-link " href="/test" >Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link active" href="/provisional/routine">Provitional</a>
+
+      <li class="nav-item dropdown">        
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Provisional<span class="caret"></span></a>        
+        <ul class="nav-item dropdown-menu">
+          <li><a class="nav-link" href="/provisional/routine">Today</a></li>
+          <li><a class="nav-link" href="/provisional/routine/previous">Previous Days</a></li>          
+        </ul>
       </li>
 
       <li class="nav-item dropdown">
@@ -38,12 +43,14 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Select Day
         <span class="caret"></span></a>
         <ul class="nav-item dropdown-menu">
+          <li><a class="nav-link" href="/day-select/Sunday">Sunday</a></li>
           <li><a class="nav-link" href="/day-select/Monday">Monday</a></li>
           <li><a class="nav-link" href="/day-select/Tuesday">Tuesday</a></li>
           <li><a class="nav-link" href="/day-select/Wednesday">Wednesday</a></li>
           <li><a class="nav-link" href="/day-select/Thursday">Thursday</a></li>
           <li><a class="nav-link" href="/day-select/Friday">Friday</a></li>
           <li><a class="nav-link" href="/day-select/Saturday">Saturday</a></li>
+          
           
         </ul>
       </li>
